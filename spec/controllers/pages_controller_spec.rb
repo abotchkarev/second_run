@@ -25,8 +25,7 @@ describe PagesController do
     it "should have the right title" do
       get 'contact'
       response.should have_selector("title",
-        :content =>
-          "Sample View | Contact")
+        :content => "Sample View | Contact")
     end    
   end
 
@@ -53,8 +52,7 @@ describe PagesController do
     it "should have the right title" do
       get 'help'
       response.should have_selector("title",
-        :content =>
-          "Sample View | Help")
+        :content => "Sample View | Help")
     end
   end
 end
