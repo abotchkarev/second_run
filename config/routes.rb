@@ -1,13 +1,20 @@
 SecondRun::Application.routes.draw do
 
   root :to => 'pages#home'
+  match '/contact', :to => 'pages#contact'                  # contact_path
+  match '/about',   :to => 'pages#about'                    # about_path
+  match '/help',    :to => 'pages#help'                     # help_path
+  
+  resources :users                                          # users_path
+  match '/signup',  :to => 'users#new'                      # signup_path
+  
+  resources :sessions, :only => [:new, :create, :destroy]   # sessions_path
+  match '/signin',  :to => 'sessions#new'                   # signin_path
+  match '/signout', :to => 'sessions#destroy'               # signout_path
 
-  resources :users
 
-  match '/signup',  :to => 'users#new'
-  match '/contact', :to => 'pages#contact'
-  match '/about',   :to => 'pages#about'
-  match '/help',    :to => 'pages#help'
+
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
