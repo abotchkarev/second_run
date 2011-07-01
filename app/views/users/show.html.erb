@@ -5,7 +5,9 @@
         <%= gravatar_for @user %>
         <%= @user.name %>
       </h1>
-      <%= "(Manager) " if @user.manager %> [<%= @user.email %>] 
+      <%= "(Admin) " if @user.admin %> 
+      <%= "(Manager)" if @user.manager %> 
+      [<%= @user.email %>] 
     </td>
     <td class="sidebar round">
       <strong>Name</strong> <%= @user.name %><br />
