@@ -1,0 +1,19 @@
+<tr>
+  <td><span class="timestamp">
+      <%= project.created_at.to_s[0..9] %>
+    </span>
+  </td>
+  <td class="project">
+    <span class="title">
+      <%= link_to project.title, project_path(project) %>
+    </span>
+  </td>
+  <% if current_user?(project.user) %>
+    <td>
+      <%= link_to "Delete", project, 
+        :method => :delete,
+        :confirm => "You sure?",
+        :title => project.title %>
+    </td>
+  <% end %>
+</tr>

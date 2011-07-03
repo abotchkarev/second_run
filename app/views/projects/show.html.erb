@@ -1,0 +1,22 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+
+<h1> Project Title</h1>
+<%= @project.title %></br>
+<h1>Description</h1>
+<%= @project.description %></br>
+
+<h1>Team <%=link_to '(management)', '#'%></h1>
+<% unless @team.nil? %>
+  <ul>
+    <%  @team.each do |user| %>
+      <li><%= link_to user.name, '#' %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<h1>Accomplishments</h1>
+Show Timetabe information here 
+

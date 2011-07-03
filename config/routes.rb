@@ -11,8 +11,8 @@ SecondRun::Application.routes.draw do
   resources :sessions, :only => [:new, :create, :destroy]   # sessions_path
   match '/signin',  :to => 'sessions#new'                   # signin_path
   match '/signout', :to => 'sessions#destroy'               # signout_path
-
-
+  
+  resources :projects #, :only => [:create, :show, :destroy]
 
 
 

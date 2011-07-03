@@ -12,7 +12,7 @@
 */
 
 .container {
-    width: 710px;
+    width: 1000px;
 }
 
 body {
@@ -200,4 +200,59 @@ ul.users {
 
 .users li {
   list-style: none;
+}
+/*===================*/
+h1.project {
+  margin-bottom: 0.3em;
+}
+
+table.projects {
+  margin-top: 1em;
+}
+
+table.projects tr {
+  height: 70px;
+}
+
+table.projects tr td.gravatar {
+  border-top: 1px solid #ccc;
+  vertical-align: top;
+  width: 50px;
+}
+
+table.projects tr td.micropost {
+  border-top: 1px solid #ccc;
+  vertical-align: top;
+  padding-top: 10px;
+}
+
+table.projects tr td.project span.timestamp {
+  display: block;
+  font-size: 85%;
+  color: #666;
+}
+
+div.user_info img {
+  padding-right: 0.1em;
+}
+
+div.user_info a {
+  text-decoration: none;
+}
+
+div.user_info span.user_name {
+  position: absolute;
+}
+
+div.user_info span.projects {
+  font-size: 80%;
+}
+
+form.new_project {
+  margin-bottom: 2em;
+}
+
+form.new_project textarea {
+  height: 4em;
+  margin-bottom: 0;
 }

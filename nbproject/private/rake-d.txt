@@ -16,6 +16,7 @@ db\:migrate\:redo=
 db\:migrate\:reset=
 db\:migrate\:status=
 db\:migrate\:up=
+db\:populate=
 db\:reset=
 db\:rollback=
 db\:schema\:dump=
