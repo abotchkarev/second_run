@@ -6,6 +6,7 @@
         <%= @user.name %>
       </h1>
 
+
       <% unless @user.projects.empty? %>
         <table class="projects" summary="User projects">
           <tr>
@@ -19,12 +20,24 @@
 
     </td>
     <td class="sidebar round">
-      <strong>Name</strong> <%= @user.name %><br />
-      [<%= @user.email %>] <br />
-      <%= "(Admin) " if @user.admin %> 
-      <%= '(Manager)' if @user.manager %> <br />
-      <strong>URL</strong>  <%= link_to user_path(@user), @user %><br />
-      <strong>Projects</strong> <%= @user.projects.count %>
+      <strong>Name</strong> <%= @user.name %> [<%= @user.email %>] <br />
+      <strong>URL</strong>  <%= link_to user_path(@user), @user %><%= " (Admin)" if @user.admin %> <br /><br />
+      <strong>Reports to </strong><%= link_to @user.chief.name, '#' %><br /><br />
+      <strong>Projects</strong> <%= link_to @user.projects.count, '#'%><br /><br />
+      
+      <%  if @user.manager %>
+        <% group = @user.subordinates.map{|f|f.name} %>
+        <% if group.size > 0 %> 
+          <strong>Supervises group of </strong><%= link_to group.size, '#' %><br /><br />
+          <strong>Group members: </strong>
+          <ul>      
+            <% @user.subordinates.each do |f|%>
+              <li><%= link_to f.name, f %> </li>
+            <% end %>
+          </ul>
+        <% end %> 
+      <% end %>
+
     </td>
   </tr>
 </table>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110701005536) do
+ActiveRecord::Schema.define(:version => 20110704005555) do
 
   create_table "projects", :force => true do |t|
     t.string   "title"
@@ -23,6 +23,18 @@ ActiveRecord::Schema.define(:version => 20110701005536) do
   add_index "projects", ["created_at"], :name => "index_projects_on_created_at"
   add_index "projects", ["user_id"], :name => "index_projects_on_user_id"
 
+  create_table "subordinations", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "chief_id"
+    t.boolean  "manager"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subordinations", ["chief_id"], :name => "index_subordinations_on_chief_id"
+  add_index "subordinations", ["user_id", "chief_id"], :name => "index_subordinations_on_user_id_and_chief_id", :unique => true
+  add_index "subordinations", ["user_id"], :name => "index_subordinations_on_user_id"
+
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "email"
@@ -32,8 +44,10 @@ ActiveRecord::Schema.define(:version => 20110701005536) do
     t.string   "encrypted_password"
     t.string   "salt"
     t.boolean  "admin",              :default => false
+    t.integer  "chief_id",           :default => 1
   end
 
+  add_index "users", ["chief_id"], :name => "index_users_on_chief_id"
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
 
 end

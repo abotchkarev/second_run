@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110630092926
+# Schema version: 20110703064225
 #
 # Table name: users
 #
@@ -12,6 +12,7 @@
 #  encrypted_password :string(255)
 #  salt               :string(255)
 #  admin              :boolean
+#  chief_id           :integer         default(1)
 #
 
 require 'digest'
@@ -19,10 +20,19 @@ require 'digest'
 class User < ActiveRecord::Base
   
   attr_accessor :password
-  attr_accessible :name, :email, :password, :password_confirmation
+  attr_accessible :name, :email, :password, :password_confirmation, :chief_id, :manager
   
   has_many :projects, :dependent => :destroy
+  
+  has_many :subordinates, :class_name => "User",
+    :foreign_key => "chief_id"
+  belongs_to :chief, :class_name => "User"
 
+  #has_many :subordinations, :foreign_key => "chief_id",
+  #  :dependent => :destroy
+
+  scope :manager, where(:manager => true)
+    
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   
   # Automatically create the virtual attribute 'password_confirmation'.

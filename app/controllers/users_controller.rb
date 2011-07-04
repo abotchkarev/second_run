@@ -17,14 +17,17 @@ class UsersController < ApplicationController
   end
 
   def new
+    @managers_list = User.manager.map {|f| [f.name, f.id]}
+    @default_chief = @managers_list[0][1]
     @user = User.new
     @title = "Sign up"
   end
   
   def create
+    params[:manager] = (params[:manager] == "true") ? true : false # convert text to boolean
     @user = User.new(params[:user])
     if @user.save
-      sign_in @user
+      #sign_in @user
       flash[:success] = "Welcome to the Sample App!"
       redirect_to @user
     else
@@ -36,11 +39,16 @@ class UsersController < ApplicationController
   
   def edit
     # @user = User.find(params[:id])
+    @managers_list = User.manager.delete_if{|f| f == @user}.map {|f| [f.name, f.id]}
+    
+    @current_chief = @user.chief_id
+    @default_manager = @user.manager
     @title = "Edit user"
   end
   
   def update
-    # @user = User.find(params[:id])
+        # @user = User.find(params[:id])
+    params[:manager] = (params[:manager] == "true") ? true : false # convert text to boolean
     if @user.update_attributes(params[:user])
       flash[:success] = "Profile updated."
       redirect_to @user
