@@ -16,6 +16,11 @@ class Project < ActiveRecord::Base
 
   belongs_to :user
   
+  has_many :relationships, :dependent => :destroy
+ 
+  has_many :executors, :class_name => "User",
+    :through => :relationships, :source => :user
+  
   validates :title, :presence => true, :length => { :maximum => 140 }
   validates :user_id, :presence => true
   

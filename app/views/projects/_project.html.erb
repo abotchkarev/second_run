@@ -8,6 +8,9 @@
       <%= link_to project.title, project_path(project) %>
     </span>
   </td>
+  <td> 
+    <%=  project.user.name %>
+  </td>
   <% if current_user?(project.user) %>
     <td>
       <%= link_to "Delete", project, 

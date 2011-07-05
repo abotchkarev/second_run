@@ -1,18 +1,15 @@
 <table class="profile" summary="Profile information">
   <tr>
     <td class="main">
-      <h1>
-        <%= gravatar_for @user %>
-        <%= @user.name %>
-      </h1>
+      <h1> <%= @title %></h1>
 
-      <button type="button"><%= link_to 'Create new project', '#' %></button>
+
       <% unless @user.projects.empty? %>
         <table class="projects" summary="User projects">
           <tr>
             <th>Start date</th>
-            <th>Project Title</th> 
-          </tr> 
+            <th>Project Title</th>
+          </tr>
           <%= render @projects %>
         </table>
         <%= will_paginate @projects %>
@@ -25,7 +22,7 @@
       <strong>Reports to </strong><%= link_to @user.chief.name, user_path(@user.chief) %><br /><br />
       <strong>Projects</strong> <%= link_to (@user.projects.count + @user.assignments.count).to_s, projects_user_path %>
       <%=  "(" + @user.projects.count.to_s + " internal and " + @user.assignments.count.to_s + " external)" %><br /><br />
-
+      
       <%  if @user.manager %>
         <% group = @user.subordinates.map{|f|f.name} %>
         <% if group.size > 0 %> 

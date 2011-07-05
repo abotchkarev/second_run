@@ -47,7 +47,7 @@ class UsersController < ApplicationController
   end
   
   def update
-        # @user = User.find(params[:id])
+    # @user = User.find(params[:id])
     params[:manager] = (params[:manager] == "true") ? true : false # convert text to boolean
     if @user.update_attributes(params[:user])
       flash[:success] = "Profile updated."
@@ -68,6 +68,19 @@ class UsersController < ApplicationController
     redirect_to users_path
   end
   
+  def group
+    users_per_page = 10
+    @user = User.find(params[:id])
+    @title = "Group of " + @user.name
+    @users = @user.subordinates.paginate(:page => params[:page], :per_page => users_per_page)
+  end
+  
+  def projects
+    projects_per_page = 5
+    @user = User.find(params[:id])
+    @title = " Projects for group of " + @user.name
+    @projects = (@user.projects + @user.assignments).paginate(:page => params[:page], :per_page => projects_per_page)
+  end
   private
 
 

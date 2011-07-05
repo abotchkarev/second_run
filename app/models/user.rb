@@ -28,8 +28,10 @@ class User < ActiveRecord::Base
     :foreign_key => "chief_id"
   belongs_to :chief, :class_name => "User"
 
-  #has_many :subordinations, :foreign_key => "chief_id",
-  #  :dependent => :destroy
+  has_many :relationships, :dependent => :destroy
+ 
+  has_many :assignments, :class_name => "Project",
+    :through => :relationships, :source => :project
 
   scope :manager, where(:manager => true)
     
@@ -48,7 +50,20 @@ class User < ActiveRecord::Base
   before_save :encrypt_password
   
   #--------------------------------------------------------------------------
+  
+  def assigned_on?(project)
+    relationships.find_by_project_id(project)
+  end
 
+  def assign_on!(project)
+    relationships.create!(:project_id => project.id)
+  end
+  
+    
+  def unassign_from!(project)
+    relationships.find_by_project_id(project).destroy
+  end
+  
   def self.authenticate(email, submitted_password)
     user = find_by_email(email)
     return nil  if user.nil?

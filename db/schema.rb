@@ -10,7 +10,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110704005555) do
+ActiveRecord::Schema.define(:version => 20110705182010) do
+
+  create_table "appointments", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "project_id"
+    t.integer  "time_factor"
+    t.text     "summary"
+    t.boolean  "active",      :default => true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "appointments", ["active"], :name => "index_appointments_on_active"
+  add_index "appointments", ["project_id"], :name => "index_appointments_on_project_id"
+  add_index "appointments", ["user_id"], :name => "index_appointments_on_user_id"
 
   create_table "projects", :force => true do |t|
     t.string   "title"
@@ -22,6 +36,17 @@ ActiveRecord::Schema.define(:version => 20110704005555) do
 
   add_index "projects", ["created_at"], :name => "index_projects_on_created_at"
   add_index "projects", ["user_id"], :name => "index_projects_on_user_id"
+
+  create_table "relationships", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "relationships", ["project_id"], :name => "index_relationships_on_project_id"
+  add_index "relationships", ["user_id", "project_id"], :name => "index_relationships_on_user_id_and_project_id", :unique => true
+  add_index "relationships", ["user_id"], :name => "index_relationships_on_user_id"
 
   create_table "subordinations", :force => true do |t|
     t.integer  "user_id"

@@ -18,8 +18,10 @@ class ProjectsController < ApplicationController
 
   def show
     @project = current_user.projects.find_by_id(params[:id])
-    @team = (3..10).map {|id| User.find(id)}
-    flash[:error] = "Team, Management, and Accomplishments sections to be written"
+    @team = @project.executors
+    #@available = [["a",1],["b",2]]
+   @available = (current_user.subordinates - @team).map {|f| [f.name, f.id]}
+    flash[:error] = "Accomplishments sections to be written"
   end
   
   def destroy
