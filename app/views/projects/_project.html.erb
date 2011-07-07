@@ -1,17 +1,30 @@
 <tr>
   <td><span class="timestamp">
-      <%= project.created_at.to_s[0..9] %>
-    </span>
+      <%= project.created_at.to_s[0..9] %></span>
   </td>
+
   <td class="project">
     <span class="title">
       <%= link_to project.title, project_path(project) %>
     </span>
   </td>
+
   <td> 
     <%=  project.user.name %>
   </td>
-  <% if current_user?(project.user) %>
+  
+  <% if  current_user?(@user.chief) %>
+    <%= form_for @user.relationships.find_by_project_id(project),
+      :html => { :method => :delete} do |f| %>
+      <td>
+        <%= f.hidden_field :project_id %>
+        <%= f.hidden_field :user_id %>   
+        <%= f.submit "Release" %>
+      </td>
+    <% end %>
+  <% end %>
+
+  <% if current_user?(@user) && current_user?(project.user) %>
     <td>
       <%= link_to "Delete", project, 
         :method => :delete,

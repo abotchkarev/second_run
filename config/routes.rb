@@ -22,7 +22,7 @@ SecondRun::Application.routes.draw do
   match '/signin',  :to => 'sessions#new'                   # signin_path
   match '/signout', :to => 'sessions#destroy'               # signout_path
   
-  resources :projects #, :only => [:create, :show, :destroy]
+  resources :projects #, :only => [:new, :create, :show, :destroy]
 
   resources :relationships, :only => [:create, :destroy]
 

@@ -1,44 +1,78 @@
-<table class="profile" summary="Profile information">
+<table class="profile" summary="users/show">
   <tr>
+
     <td class="main">
+
       <h1>
         <%= gravatar_for @user %>
         <%= @user.name %>
+        <%= " (visited by " + current_user.name + ")" unless current_user?(@user)  %>
       </h1>
-
-      <button type="button"><%= link_to 'Create new project', '#' %></button>
-      <% unless @user.projects.empty? %>
+      
+      <% if @user == current_user %>
+        <button type="button"><%= link_to 'Create new project', 
+            new_project_path %>
+        </button>
+      <% end %>
+      
+      <% unless @projects.empty? %>
         <table class="projects" summary="User projects">
           <tr>
             <th>Start date</th>
             <th>Project Title</th> 
+             <th>Created by</th> 
           </tr> 
+
           <%= render @projects %>
+
         </table>
         <%= will_paginate @projects %>
       <% end %>
-
     </td>
-    <td class="sidebar round">
-      <strong>Name</strong> <%= @user.name %> [<%= @user.email %>] <br />
-      <strong>URL</strong>  <%= link_to user_path(@user), @user %><%= " (Admin)" if @user.admin %> <br /><br />
-      <strong>Reports to </strong><%= link_to @user.chief.name, user_path(@user.chief) %><br /><br />
-      <strong>Projects</strong> <%= link_to (@user.projects.count + @user.assignments.count).to_s, projects_user_path %>
-      <%=  "(" + @user.projects.count.to_s + " internal and " + @user.assignments.count.to_s + " external)" %><br /><br />
 
-      <%  if @user.manager %>
-        <% group = @user.subordinates.map{|f|f.name} %>
-        <% if group.size > 0 %> 
-          <strong>Supervises group of </strong><%= link_to group.size, group_user_path(@user) %><br /><br />
-          <strong>Group members: </strong>
+    <td class="sidebar round">
+
+      <h1>Manager</h1>
+      <strong><%=  link_to @user.chief.name,  @user.chief %></strong>
+      <h1>Current Projects </h1>
+      <%=  "Created "  + @user.projects.count.to_s + 
+        "  Affiliated with " + @user.assignments.count.to_s %><br /><br />
+
+      <% if @user.chief == current_user %>
+        <%  unless @available.size == 0 %>
+          <%= form_for @user.relationships.
+            build(:user_id => @user.id) do |f| %>
+            <%= f.hidden_field :user_id %>
+            <%=  f.select :project_id, options_for_select(@available) %>
+            <%= f.submit "Add" %>
+          <% end %>
+        <% else %>
+          <p>No (or no more!) projects to add... :-)</p>
+        <% end %>
+      <% end %>
+
+
+      <%  if @user.manager? %>
+        <strong>Supervises group of </strong>
+        <%= link_to @user.subordinates.size, group_user_path(@user) %><br /><br />
+        <strong>Group members: </strong>
+        <% if @user.subordinates.size == 0 %>
+          <p>None</p>
+        <% else %>
           <ul>      
             <% @user.subordinates.each do |f|%>
               <li><%= link_to f.name, f %> </li>
             <% end %>
           </ul>
-        <% end %> 
+        <% end %>
+      <% else %> 
+        <strong> Other members of this group: </strong>
+        <ul>      
+          <% @user.chief.subordinates.each do |f|%>
+            <li><%= link_to f.name, f %> </li>
+          <% end %>
+        </ul>
       <% end %>
-
     </td>
   </tr>
 </table>

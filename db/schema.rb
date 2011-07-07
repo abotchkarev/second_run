@@ -10,21 +10,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110705182010) do
+ActiveRecord::Schema.define(:version => 20110706071746) do
 
   create_table "appointments", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "project_id"
     t.integer  "time_factor"
     t.text     "summary"
-    t.boolean  "active",      :default => true
+    t.boolean  "active",          :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "relationship_id"
+    t.boolean  "pause",           :default => false
   end
 
   add_index "appointments", ["active"], :name => "index_appointments_on_active"
-  add_index "appointments", ["project_id"], :name => "index_appointments_on_project_id"
-  add_index "appointments", ["user_id"], :name => "index_appointments_on_user_id"
+  add_index "appointments", ["relationship_id"], :name => "index_appointments_on_relationship_id"
 
   create_table "projects", :force => true do |t|
     t.string   "title"

@@ -29,9 +29,11 @@ class User < ActiveRecord::Base
   belongs_to :chief, :class_name => "User"
 
   has_many :relationships, :dependent => :destroy
- 
   has_many :assignments, :class_name => "Project",
     :through => :relationships, :source => :project
+  has_many :appointments, :through => :relationships
+    
+  
 
   scope :manager, where(:manager => true)
     
@@ -50,6 +52,13 @@ class User < ActiveRecord::Base
   before_save :encrypt_password
   
   #--------------------------------------------------------------------------
+  def progress
+    appointments
+  end
+  
+  def progress_on(project)
+    relationships.find_by_project_id(project).appointments
+  end
   
   def assigned_on?(project)
     relationships.find_by_project_id(project)

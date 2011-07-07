@@ -1,16 +1,15 @@
 class CreateAppointments < ActiveRecord::Migration
   def self.up
     create_table :appointments do |t|
-      t.integer :user_id
-      t.integer :project_id
+      t.integer :relationship_id
       t.integer :time_factor
       t.text :summary
       t.boolean :active, :default => true
+      t.boolean :pause, :default => false
 
       t.timestamps
     end
-    add_index :appointments, :user_id
-    add_index :appointments, :project_id
+    add_index :appointments, :relationship_id
     add_index :appointments, :active
   end
 

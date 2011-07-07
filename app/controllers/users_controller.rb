@@ -10,10 +10,22 @@ class UsersController < ApplicationController
   end
 
   def show
-    projects_per_page = 5
     @user = User.find(params[:id])
     @title = @user.name
-    @projects = @user.projects.paginate(:page => params[:page], :per_page => projects_per_page)
+    @available = []
+   
+    @projects = (case current_user
+      when @user
+        @user.assignments + @user.projects
+      when @user.chief 
+        @available = ((@user.chief.projects + @user.chief.assignments) -
+            @user.assignments).map {|f| [f.title, f.id]}
+        @user.projects + @user.assignments
+      else
+        @user.assignments - (@user.assignments - current_user.assignments)
+      end
+    ).paginate(:page => params[:page], :per_page => 5)
+    store_location
   end
 
   def new
@@ -28,7 +40,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     if @user.save
       #sign_in @user
-      flash[:success] = "Welcome to the Sample App!"
+      flash[:success] = "New account created!"
       redirect_to @user
     else
       @user.password = @user.password_confirmation = ""
@@ -47,8 +59,8 @@ class UsersController < ApplicationController
   end
   
   def update
-    # @user = User.find(params[:id])
-    params[:manager] = (params[:manager] == "true") ? true : false # convert text to boolean
+    # convert ascii to boolean
+    params[:manager] = (params[:manager] == "true") ? true : false 
     if @user.update_attributes(params[:user])
       flash[:success] = "Profile updated."
       redirect_to @user
@@ -80,10 +92,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @title = " Projects for group of " + @user.name
     @projects = (@user.projects + @user.assignments).paginate(:page => params[:page], :per_page => projects_per_page)
+    #  @available = (current_user.subordinates - @team).map {|f| [f.name, f.id]} 
   end
+
   private
-
-
   
   def correct_user
     @user = User.find(params[:id])
