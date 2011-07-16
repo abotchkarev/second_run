@@ -1,13 +1,27 @@
+<%#
+# Partial "users/user"
+# Called by: users#index
+%>
+
+<% if user_counter.zero? %>
+<tr>
+  <th>Name</th><th>Email</th>
+</tr>
+<%  end %>
+
 <tr>
   <td>
     <%= gravatar_for user, :size => 30 %>
     <%= link_to user.name, user %>
-    <% if current_user.admin? %>
-    </td>
+  </td>
+  <td>
+    <%= user.email %>
+  </td>
+  <% if current_user.admin? %>
     <td>
       <%= link_to "edit", edit_user_path(user) %>
       <%= link_to "delete", user, :method => :delete, :confirm => "You sure?",
         :title => "Delete #{user.name}" %>
-    <% end %>
-  </td>
+    </td>
+  <% end %>
 </tr>

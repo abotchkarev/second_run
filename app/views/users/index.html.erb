@@ -1,13 +1,22 @@
-<h1><%=  @title %></h1>
-<% if current_user.admin? %>
- <button type="button"><%= link_to 'Create new USER', signup_path %></button>
+<%#
+# Viewer users#index
+%>
 
-<% end %>
-<%= will_paginate %>
-
-<table class="users">
-    <%= render @users %>
+<table class="profile" summary="called by users#index">
+  <tr>    
+    <td class="main"> 
+      <h1><%=  @title %></h1>
+      <% if current_user.admin? %>
+        <button type="button"><%= link_to 'Create new USER', signup_path %></button>
+      <% end %>
+      <%= will_paginate %>
+      <table class="users">
+        <%= render @users %>
+      </table>
+      <%= will_paginate %>
+    </td>
+    <td class="sidebar round">
+      <%= render :partial => "shared/current_user_info" %>
+    </td>
+  </tr>
 </table>
-
-<%= will_paginate %>
-

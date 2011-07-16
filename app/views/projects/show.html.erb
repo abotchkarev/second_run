@@ -1,55 +1,30 @@
-<table class="profile" summary="projects/show">
+<%#
+# Viewer 'projects#show
+%>
+<table class="profile" summary="projects#show">
   <tr>
     <td class="main">
-      <h1> Project Start Date and Title </h1>
-      (<%= @project.created_at.to_s[0..9] %>) -      
-      <%= @project.title %>   </br>
-      <h1>Description</h1>
-      <%= @project.description %></br>
-      <h1>Accomplishments</h1>
-      Show Timetabe information here 
+      <%=  render :partial => 'details' %>
+      <h3>
+        Accomplishments (to be written)
+      </h3>
+      <p>Show Timetabe information here</p> 
     </td>
 
     <td class="sidebar round">
-      <h1>Project manager</h1>
-      <strong><%=  link_to @project.user.name, @project.user %></strong>
-      <h1>Team </h1>
-      <table>
-        <% unless @team.size.nil?  %>
-          <%  @team.each do |user| %>
-            <tr>
-              <td>
-                <%= form_for @project.relationships.find_by_user_id(user),
-                  :html => { :method => :delete } do |f| %>
-                  <%= f.label :user_id, (link_to user.name, user) %>
-                  <%= f.hidden_field :user_id %>
-                  <%= f.hidden_field :project_id %>
-                </td>
-                <td>
-                  <%  if current_user.subordinates.include?(user) %>
-                    <%= f.submit "Release" %>
-                  <% end %>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        <% end %>
-
-        <%  unless @available.size.nil? %>
-          <tr>
-            <td>
-              <%= form_for @project.relationships.
-                build(:project_id => @project.id) do |f| %>
-                <%= f.hidden_field :project_id %>
-                <%=  f.select :user_id, options_for_select(@available) %>
-              </td>
-              <td>
-                <%= f.submit "Add" %>
-              </td>
-            </tr>
-          <% end %>
-        <% end %>
-      </table>
+      <h3>
+        Infornation for
+      </h3>
+      <p>
+        <strong><%=  link_to current_user.name, current_user %></strong>
+      </p>
+      <h3>
+        Project manager
+      </h3>
+      <p>
+        <strong><%=  link_to @project.user.name, @project.user %></strong>    
+      </p>
+      <%=  render :partial => 'update_project_team' %>      
     </td>
   </tr>
 </table>

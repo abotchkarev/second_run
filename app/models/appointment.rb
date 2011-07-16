@@ -19,5 +19,5 @@ class Appointment < ActiveRecord::Base
   
   belongs_to :relationship
   
-  validates :summary, :presence => true, :length => { :maximum => 150 }
+  validates :summary, :length => { :maximum => 150 }
 end

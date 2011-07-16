@@ -1,0 +1,10 @@
+<%#
+# create_project_button
+# 
+%>
+
+<% if @user == current_user %>
+  <button type="button">
+    <%= link_to 'Create new project', new_project_path %>
+  </button>
+<% end %>

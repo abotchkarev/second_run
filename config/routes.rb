@@ -9,12 +9,12 @@ SecondRun::Application.routes.draw do
   match '/about',   :to => 'pages#about'                    # about_path
   match '/help',    :to => 'pages#help'                     # help_path
   
-  resources :users do                                         # users_path
-    member do
-      get :group
-      get :projects
-    end
-  end
+  resources :users  # do                                    # users_path
+  #member do
+  #  get :group
+  #  get :projects
+  #end
+  # end
 
   match '/signup',  :to => 'users#new'                      # signup_path
   
@@ -24,8 +24,10 @@ SecondRun::Application.routes.draw do
   
   resources :projects #, :only => [:new, :create, :show, :destroy]
 
-  resources :relationships, :only => [:create, :destroy]
-
+  # resources :relationships, :only => [:create, :destroy]
+  resources :relationships, :only => [:create, :destroy] 
+  
+  resources :appointments, :only => [:create, :update, :destroy]
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,0 +1,10 @@
+<%#
+# _details.erb
+# Show project details
+%>
+
+<h3> Project Start Date and Title </h3>
+(<%= @project.created_at.to_s[0..9] %>) -      
+<%= @project.title %>   </br></br>
+<h3>Description</h3>
+<%= @project.description %></br>

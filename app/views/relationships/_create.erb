@@ -1,0 +1,12 @@
+<%#
+#  "relationships/create" (create relationship) 
+#  Select 'select_id' from 'select_from' array,
+# then create 'relationship' between 'fix_id' and 'select_id' 
+%>
+
+  <%= form_for relationship, 
+    :url => "#{relationships_path}?return_to=#{request.fullpath}" do |f| %>
+    <%= f.hidden_field fix_id %>
+    <%= f.select select_id, options_for_select(select_from) %>
+    <%= f.submit "Add" %>
+  <% end %>

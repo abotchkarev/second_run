@@ -1,0 +1,35 @@
+<%#
+# sidebar_info
+# Called from users#show
+%>
+
+<h1>Reports to</h1>
+<p>
+  <strong><%=  link_to @user.chief.name,  @user.chief %></strong>
+</p>
+<h1>
+  Active Projects 
+</h1>
+<p>
+  <%=  "Assigned: #{@user.assignments.count} (initiated: #{@user.projects.count})"%>
+</p>
+<% if current_user == @user.chief  %>
+  <%  unless @projects_available.empty? %>
+    <p>
+      <strong>Select project</strong>
+    </p>
+    <%  new_rel = @user.relationships.build(:user_id => @user.id) %>
+    <p>
+      <%= render :partial => "relationships/create", 
+        :locals => {:relationship => new_rel, 
+        :fix_id => :user_id, :select_id => :project_id,
+        :select_from => @projects_available} %>
+    </p>
+  <% else %>
+    <p>
+      <strong>No more projects to add</strong>
+    </p>
+  <% end %>
+<% end %>
+
+<%= render :partial => 'shared/group_info' %>

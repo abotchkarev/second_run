@@ -12,14 +12,16 @@
 
 class Relationship < ActiveRecord::Base
   
-  attr_accessible :user_id, :project_id, :created_at
-  
-  belongs_to :user
+  attr_accessible :user_id, :project_id
+
   belongs_to :project
+  belongs_to :user
+  accepts_nested_attributes_for :project
+  
   has_many :appointments
 
-  validates :user_id, :presence => true
-  validates :project_id, :presence => true
+ # validates :user_id, :presence => true
+ # validates :project_id, :presence => true
 
 
 end

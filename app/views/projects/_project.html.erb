@@ -1,35 +1,41 @@
-<tr>
-  <td><span class="timestamp">
-      <%= project.created_at.to_s[0..9] %></span>
-  </td>
+<%#
+# Partial projects/project
+# Called by: users#show
+%>
 
+<%  if project_counter.zero? %>
+<tr>
+  <th>Start date</th>
+  <th>Project Title</th> 
+  <th>Created by</th> 
+</tr> 
+<%  end %>
+
+<tr>
+  <td>
+    <span class="timestamp">
+      <%= project.created_at.to_s[0..9] %>
+    </span>
+  </td>
   <td class="project">
     <span class="title">
       <%= link_to project.title, project_path(project) %>
     </span>
   </td>
-
   <td> 
     <%=  project.user.name %>
   </td>
-  
   <% if  current_user?(@user.chief) %>
-    <%= form_for @user.relationships.find_by_project_id(project),
-      :html => { :method => :delete} do |f| %>
-      <td>
-        <%= f.hidden_field :project_id %>
-        <%= f.hidden_field :user_id %>   
-        <%= f.submit "Release" %>
-      </td>
-    <% end %>
-  <% end %>
-
-  <% if current_user?(@user) && current_user?(project.user) %>
+    <% relationship = @user.relationships.find_by_project_id(project) %>
     <td>
-      <%= link_to "Delete", project, 
-        :method => :delete,
-        :confirm => "You sure?",
-        :title => project.title %>
-    </td>
+      <%= render :partial => "relationships/destroy", 
+        :locals => {:relationship => relationship} %>
+    </td>   
   <% end %>
+  <td>
+    <% if current_user?(@user) && current_user?(project.user) %>
+      <%= render :partial => 'projects/delete_project_button',
+        :locals => { :project => project} %>
+    <% end %>
+  </td>
 </tr>

@@ -28,7 +28,8 @@ class User < ActiveRecord::Base
     :foreign_key => "chief_id"
   belongs_to :chief, :class_name => "User"
 
-  has_many :relationships, :dependent => :destroy
+  has_many :relationships
+  
   has_many :assignments, :class_name => "Project",
     :through => :relationships, :source => :project
   has_many :appointments, :through => :relationships
@@ -52,6 +53,10 @@ class User < ActiveRecord::Base
   before_save :encrypt_password
   
   #--------------------------------------------------------------------------
+  def assignments_shared_with(user)
+    self.assignments & user.assignments
+  end
+  
   def progress
     appointments
   end

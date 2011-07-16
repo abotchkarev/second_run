@@ -1,0 +1,11 @@
+<%#
+#
+# Called by: Views/projects/_project
+%>
+
+
+      <%= link_to "Delete", project, 
+        :method => :delete,
+        :confirm => "You sure?",
+        :title => project.title %>
+   
