@@ -1,0 +1,20 @@
+<% the_list = @chief_candidates.map {|f| [f.name, f.id]} %>
+
+<%= form_for(@user) do |f| %>
+
+  <%= render 'shared/error_messages', :object => f.object %>
+
+  <p>Name<br/>                  <%= f.text_field :name %></p>  
+  <p>Email<br />                <%= f.text_field :email %></p>
+  <p>Password<br />             <%= f.password_field :password %></p>
+  <p>Password_confirmation<br /><%= f.password_field :password_confirmation %>
+  </p>
+  <% if current_user.admin? %>
+    <p>
+      Subordinate to (select)<br />
+      <%=  f.select :chief_id,
+        options_for_select(the_list, @default_chief.id) %>
+    </p>
+  <% end %>
+  <p><%= f.submit button %></p>
+<% end %>

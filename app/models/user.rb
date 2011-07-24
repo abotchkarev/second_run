@@ -20,7 +20,7 @@ require 'digest'
 class User < ActiveRecord::Base
   
   attr_accessor :password
-  attr_accessible :name, :email, :password, :password_confirmation, :chief_id, :manager
+  attr_accessible :name, :email, :password, :password_confirmation, :chief_id
   
   has_many :projects, :dependent => :destroy
   
@@ -34,9 +34,7 @@ class User < ActiveRecord::Base
     :through => :relationships, :source => :project
   has_many :appointments, :through => :relationships
     
-  
-
-  scope :manager, where(:manager => true)
+  # scope :manager, where(:manager => true)
     
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   
@@ -53,29 +51,16 @@ class User < ActiveRecord::Base
   before_save :encrypt_password
   
   #--------------------------------------------------------------------------
-  def assignments_shared_with(user)
-    self.assignments & user.assignments
-  end
-  
-  def progress
-    appointments
-  end
-  
-  def progress_on(project)
-    relationships.find_by_project_id(project).appointments
-  end
-  
-  def assigned_on?(project)
-    relationships.find_by_project_id(project)
-  end
 
-  def assign_on!(project)
-    relationships.create!(:project_id => project.id)
+  def apps_in_progress
+    self.appointments.where(:active => true, :pause => false)
   end
   
-    
-  def unassign_from!(project)
-    relationships.find_by_project_id(project).destroy
+  
+  def self.search(search, page)
+        paginate(:per_page => 10, :page => page, 
+      :conditions => ['name like ?', "%#{search}%"], 
+      :order => 'name')
   end
   
   def self.authenticate(email, submitted_password)

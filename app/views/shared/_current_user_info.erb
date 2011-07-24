@@ -1,15 +1,20 @@
-<div class="user_info" summary="sidebar info about current_user">
-  <h1>
-    Current user
-  </h1>
-  <a href="<%= user_path(current_user) %>">
-    <%= gravatar_for current_user, :size => 30 %>
-    <span class="user_name">
-      <%= current_user.name %>
-    </span>
-    </br></br>
-    <% @user = current_user %>
-    <%= render :partial => "shared/sidebar_info" %>
+<div class="user_info" summary="current_user_info for sidebar">
 
+  <h1>Current user</h1>
+  <p>
+    <%= gravatar_for current_user, :size => 30 %>
+    <%= link_to current_user.name, current_user  %>  
+  </p>
+  <p>Subordinated to
+    <strong>
+      <%=  link_to current_user.chief.name,  current_user.chief %>
+    </strong>
+  </p>
+  <h1>Active Projects</h1>
+  <p>
+    <%=  "Assigned: #{current_user.assignments.count} (initiated: #{current_user.projects.count})"%>
+  </p>
+  <%= render :partial => 'shared/group_info', 
+    :locals => {:user => current_user} %>
 </div>
 

@@ -1,7 +1,6 @@
 class ProjectsController < ApplicationController
   
   before_filter :authenticate
- 
   before_filter :group, :only => :show
   before_filter :owner, :only => :destroy
   
@@ -12,26 +11,21 @@ class ProjectsController < ApplicationController
   end
   
   def create
-    @project  = current_user.projects.new(params[:project])
-    if @project.save
-      flash[:success] = "Project created!"
-      redirect_to user_path(current_user)
-    else
-      render 'new'
-    end
+    project  = current_user.projects.new(params[:project])  
+    project.save ? redirect_to(current_user, :notice => "Project created!") : 
+      render('new')  
   end
 
   def show
-    @people_available = (current_user.subordinates - @project_team).
-      map {|f| [f.name, f.id]}
-    flash[:error] = "Accomplishments section to be written"
+    @people_available = current_user.subordinates - @project_team
+    @appointments = @project.appointments.where(:active => false).
+     paginate(:per_page => 5, :page => params[:page], :order => 'end_time DESC')   
+
   end
   
   def destroy
-    @project = current_user.projects.find_by_id(params[:id])
-    @project.destroy
-    flash[:success] = "Project deleted"
-    redirect_to user_path(current_user)
+    current_user.projects.find_by_id(params[:id]).destroy
+    redirect_to current_user, :alert => "Project deleted!"
   end
 
   private
@@ -43,15 +37,11 @@ class ProjectsController < ApplicationController
   
   def group
     @project = Project.find_by_id(params[:id]) 
-    if @project.nil?
-      flash[:error] = "Project not found" 
-      redirect_to  user_path(current_user)
-    end 
-    @project_team = @project.executors
-    unless @project_team.include?(current_user)
-      flash[:error] = "You are not authorized to access this information" 
-      redirect_to user_path(current_user)
-    end
+    redirect_to(current_user, :alert => "Project not found") if @project.nil? 
+    
+    @project_team = @project.executors    
+    redirect_to(current_user, :alert => "Access restricted (project team only)"
+    ) unless @project_team.include?(current_user)
   end
 end
 

@@ -2,20 +2,24 @@
   <tr>    
     <td class="main">      
       <h1>
-        <%= gravatar_for @user %>
-        <%= @user.name %>
+        <%= gravatar_for @user %> <%= @user.name %>
         <%= " (for #{current_user.name})" unless current_user?(@user)  %>
-      </h1>
-      <%= render :partial => "projects/create_button" %>
+      </h1>    
+      <table>
+        <% unless @projects.empty? %>
+          <h3></br>Projects in work</h3>
+          <%= render @projects %>
+        <% end %>  
+        <tr> 
+          <td></td>
+          <td><%= render :partial => "projects/create_button" %></td>
+          <td></td><td></td><td></td>
+        </tr>
+        <%= will_paginate @projects %>
+      </table>
 
-      <% unless @assignments.empty? %>
-        <table class="assignments" summary="User assignments">
-          <%= render @assignments %>
-        </table>
-        <%= will_paginate @assignments %>
-      <% end %>    
+
     </td>
-
     <td class="sidebar round">
       <%= render :partial => "shared/sidebar_info" %>
     </td>

@@ -1,17 +1,22 @@
 <%#
-# Viewer users#index
+# Viewer users#index called by controller users#index
 %>
-
-<table class="profile" summary="called by users#index">
+<table class="profile">
   <tr>    
     <td class="main"> 
-      <h1><%=  @title %></h1>
-      <% if current_user.admin? %>
-        <button type="button"><%= link_to 'Create new USER', signup_path %></button>
-      <% end %>
-      <%= will_paginate %>
+      <h1><%=  @title %> </h1>
+      <%= render :partial => 'users/search' %>      
       <table class="users">
         <%= render @users %>
+        <% if current_user.admin? %>
+          <tr>
+            <td></td>
+            <td>
+                <%= link_to 'Create new USER', signup_path %>
+            </td>
+            <td></td> <td></td>
+          </tr>
+        <% end %>
       </table>
       <%= will_paginate %>
     </td>

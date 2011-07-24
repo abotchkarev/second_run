@@ -3,10 +3,10 @@
 # Called by: users#index
 %>
 
-<% if user_counter.zero? %>
-<tr>
-  <th>Name</th><th>Email</th>
-</tr>
+<% if user_counter && user_counter.zero? %>
+  <tr>
+    <th>Name</th><th>Email</th>
+  </tr>
 <%  end %>
 
 <tr>
@@ -20,6 +20,8 @@
   <% if current_user.admin? %>
     <td>
       <%= link_to "edit", edit_user_path(user) %>
+    </td>
+    <td>
       <%= link_to "delete", user, :method => :delete, :confirm => "You sure?",
         :title => "Delete #{user.name}" %>
     </td>

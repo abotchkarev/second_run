@@ -1,0 +1,39 @@
+<%#
+# Partial "appointments/appointment" 
+# Called from viewer pages#home to renders active appointment form(s)
+# 
+%>
+<td>
+  <table class="appointment">
+    <tr>
+      <td colspan="3">
+        <strong> 
+          <%= link_to appointment.relationship.project.title, 
+            appointment.relationship.project %></strong>
+      </td>
+    </tr>
+
+    <%= form_for appointment do |f| %>
+      <tr>
+        <td colspan="2">
+          <%= f.text_field :summary %>
+        </td>
+        <td>
+          <%= f.submit "Update" %>
+        </td>
+      </tr> 
+      <tr>
+        <td>  
+          <%= f.submit (appointment.pause ? "Resume" : "Pause" ) %>
+        </td>
+        <td>
+          <%= appointment.pause ? "Paused" : "Started at #{appointment.created_at.to_s[10..15]}" %> 
+        </td>
+        <td>
+          <%= f.submit "Finish" %>
+        </td>
+      </tr>
+    <% end %>
+
+  </table>
+</td>

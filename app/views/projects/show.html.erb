@@ -5,26 +5,26 @@
   <tr>
     <td class="main">
       <%=  render :partial => 'details' %>
-      <h3>
-        Accomplishments (to be written)
-      </h3>
-      <p>Show Timetabe information here</p> 
+      <p>
+      <h3>Accomplishments</h3>
+      </p>   
+      <table class="appointments">
+        <%= render :partial => 'appointments/summary',
+          :collection => @appointments, :as => :appointment, 
+          :locals => {:title => 'Name'}%>
+      </table>
+      <%= will_paginate @appointments %>
     </td>
-
     <td class="sidebar round">
-      <h3>
-        Infornation for
-      </h3>
+      <h3>Summary for</h3>
       <p>
         <strong><%=  link_to current_user.name, current_user %></strong>
       </p>
-      <h3>
-        Project manager
-      </h3>
+      <h3>Project manager</h3>
       <p>
         <strong><%=  link_to @project.user.name, @project.user %></strong>    
       </p>
-      <%=  render :partial => 'update_project_team' %>      
+      <%=  render :partial => 'update_team' %>      
     </td>
   </tr>
 </table>

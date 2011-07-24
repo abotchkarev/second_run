@@ -4,9 +4,13 @@
 # then create 'relationship' between 'fix_id' and 'select_id' 
 %>
 
-  <%= form_for relationship, 
-    :url => "#{relationships_path}?return_to=#{request.fullpath}" do |f| %>
-    <%= f.hidden_field fix_id %>
+<%= form_for relationship, 
+  :url => "#{relationships_path}?return_to=#{request.fullpath}" do |f| %>
+  <%= f.hidden_field fix_id %>
+  <td>
     <%= f.select select_id, options_for_select(select_from) %>
+  </td>
+  <td>
     <%= f.submit "Add" %>
-  <% end %>
+  </td>
+<% end %>

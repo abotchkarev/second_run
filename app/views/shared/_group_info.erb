@@ -3,23 +3,23 @@
 # for sidebar
 %>
 
-<%  if @user.subordinates.size == 0 %>
+<%  if user.subordinates.size == 0 %>
   <strong> 
     Other members of this group: 
   </strong>
   <ul>      
-    <% @user.chief.subordinates.each do |f|%>
+    <% user.chief.subordinates.each do |f|%>
       <li><%= link_to f.name, f %> </li>
     <% end %>
   </ul>
 <% else %> 
   <strong>
-    <%= "Supervises group of #{@user.subordinates.size}" %>
+    <%= "Supervises group of #{user.subordinates.size}" %>
   </strong>
   <br /><br />
   <strong>Group members: </strong>
   <ul>      
-    <% @user.subordinates.each do |u|%>
+    <% user.subordinates.each do |u|%>
       <li><%= link_to u.name, u %> </li>
     <% end %>
   </ul>

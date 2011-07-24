@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110706071746) do
+ActiveRecord::Schema.define(:version => 20110724005550) do
 
   create_table "appointments", :force => true do |t|
     t.integer  "time_factor"
@@ -20,10 +20,16 @@ ActiveRecord::Schema.define(:version => 20110706071746) do
     t.datetime "updated_at"
     t.integer  "relationship_id"
     t.boolean  "pause",           :default => false
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer  "parent_id"
   end
 
   add_index "appointments", ["active"], :name => "index_appointments_on_active"
+  add_index "appointments", ["end_time"], :name => "index_appointments_on_end_time"
+  add_index "appointments", ["parent_id"], :name => "index_appointments_on_parent_id"
   add_index "appointments", ["relationship_id"], :name => "index_appointments_on_relationship_id"
+  add_index "appointments", ["start_time"], :name => "index_appointments_on_start_time"
 
   create_table "projects", :force => true do |t|
     t.string   "title"

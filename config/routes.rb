@@ -1,7 +1,6 @@
 SecondRun::Application.routes.draw do
 
   get "relationships/create"
-
   get "relationships/destroy"
 
   root :to => 'pages#home'

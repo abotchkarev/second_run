@@ -43,6 +43,4 @@ class Project < ActiveRecord::Base
     relationships.find_by_user_id(user).appointments
   end
 end
-#
-# appointment[0][:active] = false
-# user.relationships.where("project_id = ?", project).count
+

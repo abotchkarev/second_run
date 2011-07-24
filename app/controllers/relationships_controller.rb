@@ -6,14 +6,12 @@ class RelationshipsController < ApplicationController
   def create
     @project.relationships.create!(:user_id => @user.id)
     flash[:success] = "Relationship created"
-    #flash[:success] = params[:return_to].to_s
     send_back
   end
 
   def destroy
     @project.relationships.find_by_user_id(@user).destroy
     flash[:success] = "Relationship destroyed"
-    #  flash[:success] = params[:return_to].to_s
     send_back
   end
   
@@ -27,13 +25,23 @@ class RelationshipsController < ApplicationController
   private
   
   def verify_request_params
-    flash[:error] = "Incorrect parameters",
-      user_path(current_user) if params[:relationship].nil?
+    if params[:relationship].nil?
+      flash[:error] = "Incorrect request" 
+      user_path(current_user)
+    end
+    
     @user = User.find_by_id(params[:relationship][:user_id])
-    flash[:error] = "Error! This person is not your subordinate.", 
-      user_path(current_user) unless current_user.subordinates.include?(@user)
+    
+    unless current_user.subordinates.include?(@user)
+      flash[:error] = "Not subordinate" 
+      user_path(current_user)
+    end
+    
     @project = Project.find_by_id(params[:relationship][:project_id])
-    flash[:error] = "You are not working on this Project", 
-      user_path(current_user) unless current_user.assignments.include?(@project)
+    
+    unless current_user.assignments.include?(@project)
+      flash[:error] = "Cannot work on this project" 
+      user_path(current_user)
+    end
   end
 end

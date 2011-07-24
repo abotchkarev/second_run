@@ -1,9 +1,46 @@
-<h1>
-  Welcome to the system! 
-</h1>
-<%=  link_to "Please sign in", signin_path %>
+<%#
+# Viewer 'pages#home'
+%>
+<%  unless signed_in? %>
 
+  <h1><%= @title %></h1>
+  <%=  link_to "Please sign in", signin_path %>
 
+<% else %>
 
+  <div id="add_appt">
+    <% unless  @projects_to_add.empty? %> 
+      <h3>
+        <%=  render :partial => 'appointments/create' %>  
+      </h3>
+    <% end %>
+  </div>
 
+  <div id="active_appts">
+    <%  unless @active_count.zero? %>
+      <h3> 
+        Projects in work <%= @active_count %> (paused <%= @paused_count %>)
+      </h3>
+      <%= will_paginate @active_paginated, :param_name => 'active_page' %>
+      <table>
+        <tr>
+          <%=  render @active_paginated %>
+        </tr>
+      </table>
+    <% end %>
+  </div>
+
+  <div id="history">
+    <h3>
+      Work history
+    </h3>
+    <table class="appointments">
+      <%= render :partial => 'appointments/summary',
+        :collection => @work_history, :as => :appointment, 
+        :locals => {:title => 'Project' } %>
+    </table>
+    <%= will_paginate @work_history, :param_name => 'history_page' %>
+  </div>
+
+<% end %>
 

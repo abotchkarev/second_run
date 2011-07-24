@@ -1,40 +1,77 @@
-class RelationshipsController < ApplicationController
+class AppointmentsController < ApplicationController
 
   before_filter :authenticate
-  before_filter :correct_request
+  before_filter :correct_create, :only => :create
+  before_filter :correct_update, :only => :update
 
   def create
-    @project.relationships.create!(:user_id => @user.id)
-    
-    flash[:success] = "user_id " + @user.id.to_s + "(" + @user.name +
-      ") project_id " + @project.id.to_s + " relationship added!"
-    
-    respond_to do |format|
-      format.html { redirect_back_or @project }
-      #  format.js
-    end
+    time_factor = (apps_in_progress = current_user.apps_in_progress
+    ).size + 1  # Creating new, so "+1"
+    apps_in_progress.each {|f| f.restart_with(time_factor)}
+    @new_app.save_running_with(time_factor) ? 
+      flash[:success] = "New appointment (id = #{@new_app.id}) created" :
+      flash[:error] = "Failed to creat new appointment" 
+    redirect_to root_path
   end
 
   def update
+    @appointment.summary = params[:appointment][:summary]
+    time_factor = (apps_in_progress = current_user.apps_in_progress.
+        delete_if{|a| a == @appointment}).size # Note @appointment excluded
+
+    case params[:commit]
+    when "Update"
+      @appointment.save
+      apps_in_progress = []
+    when "Pause"    
+      @appointment.put_on_pause      
+    when "Resume"
+      time_factor += 1
+      @appointment.save_running_with(time_factor)
+    when "Finish" 
+      @appointment.save_inactive
+      apps_in_progress = [] if @appointment.pause?
+    else   
+      apps_in_progress = []
+      msg_type = :error
+    end
     
+    apps_in_progress.each {|f| f.restart_with(time_factor)}
+    flash[msg_type ||= :success] = "#{params[:commit]} #{params[:id]}" 
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.js
+    end
   end
   
   def destroy
-    @project.relationships.find_by_user_id(@user).destroy
-    flash[:success] = "user_id " + @user.id.to_s + "(" + @user.name + ") project_id " + @project.id.to_s + " relationship removed!" 
-    respond_to do |format|
-      format.html { redirect_back_or @project }
-      #  format.js
-    end
+    @appointment = current_user.appointments.find_by_id(params[:id])
+    @appointment.destroy
+    flash[:success] = "Appointment deleted"
+    redirect_to root_path
   end
   
   private
   
-  def correct_request
-    @user = User.find(params[:relationship][:user_id])
-    flash[:error] = "Wrong user", user_path(current_user) unless current_user.subordinates.include?(@user)
-    @project = Project.find(params[:relationship][:project_id])
-    flash[:error] = "Wrong Project", user_path(current_user) unless (current_user.projects + 
-        current_user.assignments).include?(@project)
+  def correct_create
+    @new_app = Appointment.new(params[:appointment])
+    if  @new_app.nil? ||
+        @new_app.relationship.nil? ||
+        !current_user?(@new_app.relationship.user)
+      flash[:error] = "Incorrect parameters to create new appointment" 
+      redirect_to root_path
+    end
+  end
+  
+  def correct_update
+    @appointment = Appointment.find_by_id(params[:id])
+    if @appointment.nil? || 
+        !@appointment.active? ||
+        !current_user?(@appointment.relationship.user) ||
+        (params[:commit] == "Pause" && @appointment.pause?) ||
+        (params[:commit] == "Resume" && !@appointment.pause?)
+      flash[:error] = "Incorrect/inconsistent parameters for Appointment update" 
+      redirect_to root_path
+    end
   end
 end
