@@ -21,27 +21,16 @@
         appointment.relationship.project %>
     <% end %>
   </td>
-  <td>
-    <%=  appointment.start_time.getlocal.to_s[10..18] %>
-  </td>
-  <td>
-    <%=  appointment.end_time.getlocal.to_s[10..18] %>
-  </td>
-  <td>
-    <%=  appointment.time_factor %>
-  </td>
-  <td>
-    <%=  appointment.id %>/<%=  appointment.parent_id %>
-  </td>
-  <td>
-    <%=  appointment.summary %>
-  </td>
+  <td><%=  appointment.start_time.getlocal.to_s[10..18] unless appointment.start_time.nil? %></td>
+  <td><%=  appointment.end_time.getlocal.to_s[10..18] unless appointment.end_time.nil? %></td>
+  <td><%=  appointment.time_factor %></td>
+  <td><%=  appointment.id %>/<%=  appointment.parent_id %></td>
+  <td><%=  appointment.summary %></td>
   <td>
     <% if title == "Project" %>
-      <%= link_to "Delete", appointment, 
-        :method => :delete,
-        :confirm => "You sure?",
-        :title => "" %>
+      <strong><%= link_to "Delete", appointment, 
+          :method => :delete, :confirm => "You sure?", :title => "" %>
+      </strong>
     <% end %>
   </td>
 </tr>

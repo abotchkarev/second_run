@@ -18,7 +18,8 @@ class SessionsController < ApplicationController
       end
     else
       sign_in user
-      redirect_back_or user
+      flash[:info] = "Hello #{user.name}! Wecome back..."
+      redirect_to root_path
     end
   end
 

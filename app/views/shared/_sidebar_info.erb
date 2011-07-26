@@ -3,8 +3,9 @@
 # Called from users#show(id)
 %>
 <div class="user_info" summary="sidebar_info about @user">
-
-  <h1>Subordinated to</h1>
+  <h1>
+    Subordinated to
+  </h1>
   <p>
     <strong><%=  link_to @user.chief.name,  @user.chief %></strong>
   </p>
@@ -12,26 +13,24 @@
   <p>
     <%=  "In work: #{@user.assignments.count} (initiated: #{@user.projects.count})"%>
   </p>
-  <% if current_user == @user.chief  %>
-    <%  unless @projects_available.empty? %>
+  <% if current_user == @user.chief  && (@user != @user.chief) %>
+    <%  unless @projects_available.nil? || @projects_available.empty? %>
+      <% new_rel = @user.relationships.build(:user_id => @user.id) %>
+      <% this_list =  @projects_available.map{|f| [f.title, f.id]} %>
       <p>
-        <strong>Select project</strong>
+        <strong>Project for subordinate</strong>
       </p>
-      <%  new_rel = @user.relationships.build(:user_id => @user.id) %>
-      <% the_list =  @projects_available.map{|f| [f.title, f.id]} %>
       <table>
         <tr>
-          <%= render :partial => "relationships/create", 
-            :locals => {:relationship => new_rel, 
-            :fix_id => :user_id, :select_id => :project_id,
-            :select_from => the_list} %>
+          <%= render :partial => "relationships/create", :locals => 
+            {:relationship => new_rel, :fix_id => :user_id, 
+            :select_id => :project_id, :select_from => this_list} %>
         </tr>
       </table>
     <% else %>
       <p>
-        <strong>No projects for select</strong>
+        <strong>Project list empty</strong>
       </p>
     <% end %>
   <% end %>
-
   <%= render :partial => 'shared/group_info', :locals => {:user => @user} %>

@@ -1,0 +1,33 @@
+<%#
+# Partial "projects/update_team"
+#
+# Called from projects#show. Rendered in in sidebar
+# Used to add/release people from team
+%>
+<% unless @project_team.nil? || @project_team.empty?  %>
+  <%  @project_team.each do |user| %>
+    <tr>
+      <td> <%= link_to user.name, user %></td>
+      <td>
+        <%  if current_user.subordinates.include?(user) && !current_user?(user) %>
+          <%  relationship = @project.relationships.find_by_user_id(user) %>
+          <%= render :partial => "relationships/destroy", 
+            :locals => {:relationship => relationship} %>
+        <% end %>
+      </td> 
+    </tr>
+  <% end %>
+<% end %>
+<%  unless @people_available.nil? || @people_available.empty? %>
+  <% new_rel = @project.relationships.build(:project_id => @project.id) %>
+  <% this_list = @people_available.map {|f| [f.name, f.id]} %>
+  <tr>
+    <%= render :partial => "relationships/create", :locals => 
+      {:relationship => new_rel, :fix_id => :project_id, 
+      :select_id => :user_id, :select_from => this_list} %>
+  </tr>
+<% else %>
+  <tr>
+    <td><strong>(Full list)</strong></td>
+  </tr>
+<% end %>

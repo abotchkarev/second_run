@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110724005550) do
+ActiveRecord::Schema.define(:version => 20110726013258) do
 
   create_table "appointments", :force => true do |t|
     t.integer  "time_factor"
@@ -56,7 +56,6 @@ ActiveRecord::Schema.define(:version => 20110724005550) do
   create_table "subordinations", :force => true do |t|
     t.integer  "user_id"
     t.integer  "chief_id"
-    t.boolean  "manager"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -68,16 +67,13 @@ ActiveRecord::Schema.define(:version => 20110724005550) do
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "email"
-    t.boolean  "manager",            :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "encrypted_password"
     t.string   "salt"
     t.boolean  "admin",              :default => false
-    t.integer  "chief_id",           :default => 1
   end
 
-  add_index "users", ["chief_id"], :name => "index_users_on_chief_id"
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
 
 end

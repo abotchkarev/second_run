@@ -9,7 +9,7 @@ class AppointmentsController < ApplicationController
     ).size + 1  # Creating new, so "+1"
     apps_in_progress.each {|f| f.restart_with(time_factor)}
     @new_app.save_running_with(time_factor) ? 
-      flash[:success] = "New appointment (id = #{@new_app.id}) created" :
+      flash[:success] = "New appointment created" :
       flash[:error] = "Failed to creat new appointment" 
     redirect_to root_path
   end
@@ -17,7 +17,7 @@ class AppointmentsController < ApplicationController
   def update
     @appointment.summary = params[:appointment][:summary]
     time_factor = (apps_in_progress = current_user.apps_in_progress.
-        delete_if{|a| a == @appointment}).size # Note @appointment excluded
+        delete_if{|a| a == @appointment}).size # Exclude @appointment, if present
 
     case params[:commit]
     when "Update"
@@ -37,7 +37,8 @@ class AppointmentsController < ApplicationController
     end
     
     apps_in_progress.each {|f| f.restart_with(time_factor)}
-    flash[msg_type ||= :success] = "#{params[:commit]} #{params[:id]}" 
+    msg_type ||= :success
+    flash[msg_type] = "#{params[:commit]} #{msg_type.to_s}" 
     respond_to do |format|
       format.html { redirect_to root_path }
       format.js
@@ -58,7 +59,7 @@ class AppointmentsController < ApplicationController
     if  @new_app.nil? ||
         @new_app.relationship.nil? ||
         !current_user?(@new_app.relationship.user)
-      flash[:error] = "Incorrect parameters to create new appointment" 
+      flash[:error] = "Incorrect parameters for create new appointment" 
       redirect_to root_path
     end
   end

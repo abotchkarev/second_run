@@ -1,0 +1,25 @@
+<table class="profile" summary="user#show">
+  <tr>    
+    <td class="main">      
+      <h1>
+        <%= gravatar_for @user %> <%= @user.name %>
+        <%= " (for #{current_user.name})" unless current_user?(@user)  %>
+      </h1> <br/>
+       <h3>Projects in work</h3>
+      <table>
+        <% unless @projects.empty? %>
+          <%= render @projects %>
+        <% end %>  
+        <tr> 
+          <td></td>
+          <td><%= render :partial => "projects/create" %></td>
+          <td></td><td></td><td></td>
+        </tr>
+        <%= will_paginate @projects %>
+      </table>
+    </td>
+    <td class="sidebar round">
+      <%= render :partial => "shared/sidebar_info" %>
+    </td>
+  </tr>
+</table>

@@ -1,0 +1,9 @@
+<h3> Current chief: <strong> <%= @default_chief.name %></strong></h3>
+<% this_list = @chief_candidates.map {|f| [f.name, f.id]} %>
+<% default = @default_chief.id %>
+<%= form_for(@user.subordination) do |f| %>
+  Subordinate to<br />  
+  <%=  f.select :chief_id,
+    options_for_select(this_list, default) %>
+  <%= f.submit 'Submit' %>
+<% end %>

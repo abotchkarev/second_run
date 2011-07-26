@@ -8,14 +8,17 @@ SecondRun::Application.routes.draw do
   match '/about',   :to => 'pages#about'                    # about_path
   match '/help',    :to => 'pages#help'                     # help_path
   
-  resources :users  # do                                    # users_path
-  #member do
-  #  get :group
-  #  get :projects
-  #end
-  # end
+  resources :users do                                    # users_path
+    member do
+      get :admin
+      get :group
+      #  get :projects
+    end
+  end
 
   match '/signup',  :to => 'users#new'                      # signup_path
+  
+  resources :subordinations, :only => :update
   
   resources :sessions, :only => [:new, :create, :destroy]   # sessions_path
   match '/signin',  :to => 'sessions#new'                   # signin_path

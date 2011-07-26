@@ -5,7 +5,10 @@
       <li><%= link_to "Home", root_path %></li>
       <% if signed_in? %>
         <li><%= link_to "Projects", current_user %></li>
-        <li><%= link_to "Users", users_path %></li>
+        <% unless current_user.subordinates.empty? %>
+          <li><%= link_to "Group", group_user_path(current_user) %></li>
+        <% end %>
+        <li><%= link_to "Catalogue", users_path %></li>
         <li><%= link_to "Settings", edit_user_path(current_user) %></li>
       <% end %>
       <li><%= link_to "Help", help_path %></li>

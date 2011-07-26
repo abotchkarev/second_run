@@ -1,18 +1,16 @@
 # == Schema Information
-# Schema version: 20110703064225
+# Schema version: 20110726013258
 #
 # Table name: users
 #
 #  id                 :integer         not null, primary key
 #  name               :string(255)
 #  email              :string(255)
-#  manager            :boolean
 #  created_at         :datetime
 #  updated_at         :datetime
 #  encrypted_password :string(255)
 #  salt               :string(255)
 #  admin              :boolean
-#  chief_id           :integer         default(1)
 #
 
 require 'digest'
@@ -20,22 +18,8 @@ require 'digest'
 class User < ActiveRecord::Base
   
   attr_accessor :password
-  attr_accessible :name, :email, :password, :password_confirmation, :chief_id
+  attr_accessible :name, :email, :password, :password_confirmation
   
-  has_many :projects, :dependent => :destroy
-  
-  has_many :subordinates, :class_name => "User",
-    :foreign_key => "chief_id"
-  belongs_to :chief, :class_name => "User"
-
-  has_many :relationships
-  
-  has_many :assignments, :class_name => "Project",
-    :through => :relationships, :source => :project
-  has_many :appointments, :through => :relationships
-    
-  # scope :manager, where(:manager => true)
-    
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   
   # Automatically create the virtual attribute 'password_confirmation'.
@@ -47,9 +31,35 @@ class User < ActiveRecord::Base
   validates :email, :presence   => true,
     :format     => { :with => email_regex },
     :uniqueness => { :case_sensitive => false }
-
+   
   before_save :encrypt_password
+ 
   
+  has_one :subordination, :dependent => :destroy 
+  accepts_nested_attributes_for :subordination
+  attr_accessible :subordination_attributes
+  
+  has_one :chief, :through => :subordination 
+    
+  has_many :reverse_subordinations, :class_name => "Subordination",
+    :foreign_key => "chief_id", :dependent => :destroy
+   
+  has_many :subordinates, :through => :reverse_subordinations, 
+    :source => :subordinate
+
+  has_many :projects, :dependent => :destroy
+
+
+  has_many :relationships
+  
+  has_many :assignments, :class_name => "Project",
+    :through => :relationships, :source => :project
+  
+  has_many :appointments, :through => :relationships
+ 
+   
+  # has_many :subordinates, :class_name => "User", :foreign_key => "chief_id"
+  # belongs_to :chief, :class_name => "User"
   #--------------------------------------------------------------------------
 
   def apps_in_progress
@@ -58,7 +68,7 @@ class User < ActiveRecord::Base
   
   
   def self.search(search, page)
-        paginate(:per_page => 10, :page => page, 
+    paginate(:per_page => 10, :page => page, 
       :conditions => ['name like ?', "%#{search}%"], 
       :order => 'name')
   end

@@ -1,0 +1,30 @@
+<%#
+# Viewer 'projects#show
+%>
+<table class="profile" summary="projects#show">
+  <tr>
+    <td class="main">
+      <div class="project_details">
+        <%=  render :partial => 'projects/details' %>
+      </div><br/>
+      <h3>
+        Accomplishments
+      </h3> 
+      <table class="appointments">
+        <%= render :partial => 'appointments/summary', :collection => 
+          @appointments, :as => :appointment, :locals => {:title => 'Name'}%>
+      </table>
+      <%= will_paginate @appointments %>
+    </td>
+    <td class="sidebar round">
+      <h3>HR on this Project</h3>
+      <p>(Summary for <strong><%=  link_to current_user.name, current_user %>)</strong></p>
+      <h3>Project Manager</h3>
+      <p><strong><%=  link_to @project.user.name, @project.user %></strong></p>
+      <h3>Team </h3>
+      <table>
+        <%=  render :partial => 'projects/team' %>   
+      </table>
+    </td>
+  </tr>
+</table>

@@ -1,0 +1,28 @@
+<table class="profile" summary="user#show">
+  <tr>    
+    <td class="main"> 
+      <h1><%=  @title %></h1>
+      <h1><%= gravatar_for @user %> <%= @user.name %></h1>  
+      <table>
+        <tr>
+          <th>Change Account Information</th>
+          <th>Change subordination</th>
+        </tr>
+        <tr> 
+          <td><%=  render :partial => 'update_form' %></td>
+          <td>     
+            <%=  render :partial => 'subordinate_form' %><br/><br/><br/>
+            <h3>
+              <%= link_to "Delete account", @user, 
+                :method => :delete, :confirm => "You sure?", :title => "Delete" %>
+            </h3>
+          </td>
+        </tr>
+      </table>
+      <strong><%= link_to "Go back to Catalog", users_path %></strong>
+    </td>
+    <td class="sidebar round">
+      <%= render :partial => "shared/sidebar_info" %>
+    </td>
+  </tr>
+</table>

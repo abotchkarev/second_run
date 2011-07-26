@@ -1,18 +1,18 @@
 class UsersController < ApplicationController
   
   before_filter :authenticate
-  before_filter :correct_user, :only => [:edit, :update]
-  before_filter :admin_user,   :only => [:new, :create, :destroy]
+  before_filter :get_user, :except => [:index, :new, :create]
+  before_filter :current_or_admin, :only => [:edit, :update]
+  before_filter :admin_only,   :only => [:new, :create, :destroy, :admin]
+  
 
   def index
-    @title = "Catalog of Users"
+    @title = "Catalogue of Users"
     @users = User.search(params[:search], params[:page])
   end
 
   def show
-    @user = User.find_by_id(params[:id]) 
-    @title = @user.name    
-    
+    @title = @user.name     
     @projects = (current_user?(@user) || current_user?(@user.chief) ?
         @user.assignments : @user.assignments & current_user.assignments
     ).paginate( :per_page => 5, :page => params[:page])
@@ -23,7 +23,15 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    setup_new
+    subordination_setup("Sign up")
+  end
+  
+  def subordination_setup(title, chief = current_user)
+    @title = title
+    @default_chief = chief
+    @chief_candidates = User.all
+    @chief_candidates.delete_if{|f| f == @user} unless @user.admin?
+    @user.build_subordination if @user.subordination.nil?
   end
   
   def create
@@ -32,52 +40,57 @@ class UsersController < ApplicationController
       redirect_to(@user, :notice => "New account created!")  
     else
       @user.password = @user.password_confirmation = ""
-      setup_new
+      subordination_setup("Sign up")
       render 'new'
     end
   end
   
   def edit
     @title = "Edit user"
-    @default_chief = @user.chief
-    @chief_candidates = (current_user.admin ? User.all : [])
   end
   
   def update
     if @user.update_attributes(params[:user])
       redirect_to(@user, :notice => "Profile updated.")
     else
+      @title = "Edit user"
       @user.password = @user.password_confirmation = ""
-      edit
       render 'edit'
     end
   end
   
   def destroy
-    if current_user?( user = User.find(params[:id]) )
-      flash[:alert] = "Cannot delete current user account!"
+    if current_user?( @user )
+      flash[:alert] = "Cannot delete account of current user!"
     else
-      user.destroy
+      @user.destroy
       flash[:notice] = "User destroyed."
     end
     redirect_to users_path
   end
-  
-  def setup_new
-    @title = "Sign up"  
-    @default_chief = current_user
-    @chief_candidates = User.all
+   
+  def admin
+    subordination_setup("Administring Account ", @user.chief)
   end
   
+  def group
+    @title = "Group of #{@user.name}"
+    @users = @user.subordinates.delete_if{|f| f == @user}.
+      paginate( :per_page => 10, :page => params[:page])
+    render 'index'
+  end
+
   private
-  
-  def correct_user
+
+  def get_user
     @user = User.find_by_id(params[:id])
-    # params[:user].delete(:chief_id) unless current_user.admin?
+  end
+  
+  def current_or_admin
     redirect_to(root_path) unless current_user?(@user) || current_user.admin?
   end
   
-  def admin_user
+  def admin_only
     redirect_to(root_path) unless current_user.admin?
   end
 end

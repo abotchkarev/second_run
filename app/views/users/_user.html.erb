@@ -19,11 +19,7 @@
   </td>
   <% if current_user.admin? %>
     <td>
-      <%= link_to "edit", edit_user_path(user) %>
-    </td>
-    <td>
-      <%= link_to "delete", user, :method => :delete, :confirm => "You sure?",
-        :title => "Delete #{user.name}" %>
+      <%= link_to "Modify", admin_user_path(user) %>
     </td>
   <% end %>
 </tr>

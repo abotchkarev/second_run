@@ -2,24 +2,25 @@
 # "_group_info"
 # for sidebar
 %>
+<% group = user.subordinates.delete_if{|f| f == user} %>
 
-<%  if user.subordinates.size == 0 %>
+<%  if group.size == 0 %>
   <strong> 
-    Other members of this group: 
+    Members of this group: 
   </strong>
   <ul>      
-    <% user.chief.subordinates.each do |f|%>
+    <% user.chief.subordinates.delete_if{|f| f == user.chief}.each do |f|%>
       <li><%= link_to f.name, f %> </li>
     <% end %>
   </ul>
-<% else %> 
+<% else %>
   <strong>
-    <%= "Supervises group of #{user.subordinates.size}" %>
+    <%= "Supervises group of" %> <%=  link_to group.size, group_user_path(user) %>
   </strong>
   <br /><br />
   <strong>Group members: </strong>
   <ul>      
-    <% user.subordinates.each do |u|%>
+    <% group.each do |u|%>
       <li><%= link_to u.name, u %> </li>
     <% end %>
   </ul>

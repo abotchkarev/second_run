@@ -1,0 +1,10 @@
+<%#
+# Partial project/create 
+# Create project button
+# 
+%>
+<strong>
+<% if @user == current_user %>
+    <%= link_to 'Create new PROJECT', new_project_path %>
+<% end %>
+</strong>
