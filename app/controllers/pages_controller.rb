@@ -25,7 +25,7 @@ class PagesController < ApplicationController
         paginate(:per_page => 5, :page => params[:history_page], :order => 'end_time DESC')
     end
   end
-
+  
   def contact
     @title = "Contact"
   end
@@ -37,4 +37,13 @@ class PagesController < ApplicationController
   def help
     @title = "Help"
   end
+end
+
+def def_title(*args)
+  ctl = class << self; self; end
+  args.each{|title| 
+    ctl.send(:define_method, title) do
+      @title = title.to_s
+    end 
+  }
 end

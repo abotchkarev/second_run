@@ -31,14 +31,13 @@ class SessionsController < ApplicationController
   private
   
   def create_root
-    User.new(:name => "root", :email => "root@e.mail",
-      :password => "123456", :password_confirmation => "123456").save
-    user = User.find_by_email("root@e.mail")
-    user.chief_id = user.id
+    user = User.new(:name => "root", :email => "root@e.mail",
+      :password => "123456", :password_confirmation => "123456")
     user.admin = true
-    user.update_attributes(:password => "123456", :password_confirmation => "123456")
+    user.save
+    user.build_subordination(:chief_id => user.id).save
     sign_in user
-    flash[:alert] = "Initializing the system. Please update the 'root' account"
+    flash[:alert] = "Initializing the system. Please update 'root' account"
     redirect_to edit_user_path(user)
   end
 end
