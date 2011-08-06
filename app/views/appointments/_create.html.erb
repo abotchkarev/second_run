@@ -1,0 +1,16 @@
+<%#
+# Partial "appinntments/create" 
+# creates new active appointment with (pause = false) .
+# Called from 'pages#home' viewer
+%>
+
+<% unless @projects_to_add.empty? %> 
+  <h3>
+    <%# form_for @new_appointment do |f| %>
+    <%= form_for @new_appointment, :remote => true   do |f| %>
+      <%= f.label :relationship_id, "Select project to work with" %>
+      <%= f.select :relationship_id, options_for_select(@projects_to_add) %>
+      <%= f.submit "Start" %>
+    <% end %>
+  </h3>
+<% end %>

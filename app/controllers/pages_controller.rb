@@ -1,28 +1,14 @@
 class PagesController < ApplicationController
-  
+   
+  include AppointmentsHelper
+   
   def home
-    unless signed_in?
-      @title = "Welcome to the system!"
-    else
-      @active_count = (
-        all_active = current_user.appointments.where(:active => true)
-      ).size
-      
-      @paused_count = all_active.map{|a| a.pause}.count(true)
-            
-      @active_paginated = all_active.paginate(:per_page => 3, 
-        :page => params[:active_page], :order => 'created_at DESC')
-     
-      inactive_project_ids = current_user.assignment_ids - 
-        all_active.map {|a| a.relationship.project_id}
-      
-      @projects_to_add = inactive_project_ids.map {|id| [Project.find(id).title, 
-          current_user.relationships.find_by_project_id(id).id] }  
-      
+    if signed_in?
       @new_appointment = Appointment.new
-      
-      @work_history = current_user.appointments.where(:active => false).
-        paginate(:per_page => 5, :page => params[:history_page], :order => 'end_time DESC')
+      active_and_activatable
+      @work_history = current_user.history(params[:history_page])
+    else
+      @title = "Welcome to the system!"
     end
   end
   
@@ -37,13 +23,4 @@ class PagesController < ApplicationController
   def help
     @title = "Help"
   end
-end
-
-def def_title(*args)
-  ctl = class << self; self; end
-  args.each{|title| 
-    ctl.send(:define_method, title) do
-      @title = title.to_s
-    end 
-  }
 end

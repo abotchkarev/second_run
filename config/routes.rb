@@ -30,6 +30,8 @@ SecondRun::Application.routes.draw do
   resources :relationships, :only => [:create, :destroy] 
   
   resources :appointments, :only => [:create, :update, :destroy]
+  
+  match '/appointments/:id' => 'appointments#update'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

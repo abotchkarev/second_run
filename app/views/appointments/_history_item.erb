@@ -1,0 +1,41 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+<% if appointment_counter &&  appointment_counter.zero? %>
+  <tr class="Table_header"> 
+    <th><%= title %> </th>
+    <th>Started</th>
+    <th>Finished</th>
+    <th>Segs</th>
+    <th>Id</th>
+    <th>Summary</th>
+    <th></th>
+  </tr>
+<% end %>
+<tr>
+  <td>
+    <% if  title == "Name" %>
+      <%=  link_to appointment.relationship.user.name, appointment.relationship.user  %>
+    <%  else %>  
+      <%=  link_to "#{appointment.relationship.project.title[0..15]}...", 
+        appointment.relationship.project %>
+    <% end %>
+  </td>
+  <td><%=  appointment.start_time.getlocal.to_s[10..18] unless appointment.start_time.nil? %></td>
+  <td><%=  appointment.end_time.getlocal.to_s[10..18] unless appointment.end_time.nil? %></td>
+  <td><%=  appointment.timeslots.size %></td>
+  <td><%=  appointment.id %></td>
+  <td><%=  appointment.summary %></td>
+  <td>
+    <% if title == "Project" %>
+      <strong>
+        <%# link_to "Delete", appointment,  :method => :delete,
+          :confirm => "You? sure?" %>        
+        <%= link_to "Delete", appointment,  :method => :delete, :remote => true,
+          :confirm => "You? sure?" %>
+      </strong>
+    <% end %>
+  </td>
+</tr>
+

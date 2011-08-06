@@ -15,8 +15,7 @@ class UsersController < ApplicationController
     @title = @user.name     
     @projects = (current_user?(@user) || current_user?(@user.chief) ?
         @user.assignments : @user.assignments & current_user.assignments
-    ).paginate( :per_page => 5, :page => params[:page])
-    
+    ).paginate( :per_page => 5, :page => params[:page])    
     @projects_available = (current_user?(@user.chief) ? 
         (@user.chief.assignments - @user.assignments) : [])
   end
@@ -25,15 +24,7 @@ class UsersController < ApplicationController
     @user = User.new
     subordination_setup("Sign up")
   end
-  
-  def subordination_setup(title, chief = current_user)
-    @title = title
-    @default_chief = chief
-    @chief_candidates = User.all
-    @chief_candidates.delete_if{|f| f == @user} unless @user.admin?
-    @user.build_subordination if @user.subordination.nil?
-  end
-  
+    
   def create
     @user = User.new(params[:user]) 
     if @user.save 
@@ -61,16 +52,16 @@ class UsersController < ApplicationController
   
   def destroy
     if current_user?( @user )
-      flash[:alert] = "Cannot delete account of current user!"
+      flash[:alert] = "This account cannot be deleted!"
     else
       @user.destroy
-      flash[:notice] = "User destroyed."
+      flash[:notice] = "Account destroyed."
     end
     redirect_to users_path
   end
    
   def admin
-    subordination_setup("Administring Account ", @user.chief)
+    subordination_setup("Administring the Account ", @user.chief)
   end
   
   def group
@@ -80,18 +71,27 @@ class UsersController < ApplicationController
     render 'index'
   end
 
-  private
+  def subordination_setup(title, chief = current_user.subordinates.first)
+    @title = title
+    @user.build_subordination if @user.subordination.nil?
+    @default_chief = chief
+    user_tree = [@user]
+    @chief_candidates = ( @user.admin ? [chief] :
+       User.all - user_tree.each{|u| u.subordinates.each {|f| user_tree << f }})
+    end
+  
+    private
 
-  def get_user
-    @user = User.find_by_id(params[:id])
-  end
+    def get_user
+      @user = User.find_by_id(params[:id])
+    end
   
-  def current_or_admin
-    redirect_to(root_path) unless current_user?(@user) || current_user.admin?
-  end
+    def current_or_admin
+      redirect_to(root_path) unless current_user?(@user) || current_user.admin?
+    end
   
-  def admin_only
-    redirect_to(root_path) unless current_user.admin?
+    def admin_only
+      redirect_to(root_path) unless current_user.admin?
+    end
   end
-end
 

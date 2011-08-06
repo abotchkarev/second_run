@@ -57,15 +57,20 @@ class User < ActiveRecord::Base
   
   has_many :appointments, :through => :relationships
  
-   
-  # has_many :subordinates, :class_name => "User", :foreign_key => "chief_id"
-  # belongs_to :chief, :class_name => "User"
   #--------------------------------------------------------------------------
 
-  def apps_in_progress
+  def running_apps
     self.appointments.where(:active => true, :pause => false)
   end
   
+  def active_apps
+    self.appointments.where(:active => true)
+  end
+
+  def history(page)
+    self.appointments.where(:active => false).
+      paginate(:per_page => 5, :page => page, :order => 'end_time DESC')
+  end
   
   def self.search(search, page)
     paginate(:per_page => 10, :page => page, 

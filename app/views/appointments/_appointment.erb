@@ -3,26 +3,38 @@
 # Called from viewer pages#home to renders active appointment form(s)
 # 
 %>
-<td>
-  <table class="appointment">
-    <tr>
-      <td colspan="3">
-        <strong><%= link_to appointment.relationship.project.title, 
-            appointment.relationship.project %></strong>
-      </td>
-    </tr>
-    <%= form_for appointment do |f| %>
-      <tr>
-        <td colspan="2"><%= f.text_field :summary %></td>
-        <td><%= f.submit "Update" %></td>
-      </tr> 
-      <tr>
-        <td><%= f.submit (appointment.pause ? "Resume" : "Pause" ) %></td>
-        <td><%= appointment.pause ? "Paused" : 
-            "Started at #{appointment.start_time.getlocal.to_s[10..15]}" %>
-        </td>
-        <td><%= f.submit "Finish" %></td>
-      </tr>
-    <% end %>
-  </table>
-</td>
+<tr>
+<table>
+  <tr>
+    <td>
+      <strong>
+        Project: <%= link_to appointment.relationship.project.title, 
+          appointment.relationship.project %>
+      </strong>
+      <%= "(Started at #{appointment.created_at.getlocal.to_s[10..18]}" %>
+      <% unless appointment.created_at.to_s[10..18] == appointment.start_time.to_s[10..18] %>
+        <%= appointment.pause ? ". Paused. " : 
+          ". Restarted at #{appointment.start_time.getlocal.to_s[10..18]}" %>
+      <% end %>
+      <%= appointment.pause ? "" : " with time-factor #{appointment.time_factor}." %> )
+    </td>
+    <td>
+      <% form_for appointment, :remote => true do |f| %>
+        <%= f.submit(appointment.pause ? "Resume" : "Pause" ) %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <%= label_tag(:summary, "Summary: ") %>
+      <%= text_field_tag :summary, appointment.summary,  :size => 120,
+        :onchange => remote_function(:url => appointment,  
+        :with => "'commit=Update;appointment[summary]=' + this.value" ) %>
+    </td>
+    <td>
+      <%=  submit_tag "Finish", :onclick => remote_function(:url => appointment, 
+        :with => "'commit=Finish'" )%>
+    </td>
+  </tr>
+</table>
+</tr>

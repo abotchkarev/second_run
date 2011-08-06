@@ -1,0 +1,4 @@
+// alert('create.js.erb: ajax started')
+ $("flash").update('<div class="flash notice">Ajax: <%= escape_javascript(flash.delete(:notice)) %></div>')
+ $("create_app").update('<%= escape_javascript(render('appointments/create'))  %>')
+ $("show_active").update('<%= escape_javascript(render( 'appointments/all_active')) %>')

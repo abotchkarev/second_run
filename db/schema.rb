@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110726013258) do
+ActiveRecord::Schema.define(:version => 20110727012528) do
 
   create_table "appointments", :force => true do |t|
     t.integer  "time_factor"
@@ -63,6 +63,13 @@ ActiveRecord::Schema.define(:version => 20110726013258) do
   add_index "subordinations", ["chief_id"], :name => "index_subordinations_on_chief_id"
   add_index "subordinations", ["user_id", "chief_id"], :name => "index_subordinations_on_user_id_and_chief_id", :unique => true
   add_index "subordinations", ["user_id"], :name => "index_subordinations_on_user_id"
+
+  create_table "timeslots", :force => true do |t|
+    t.integer  "appointment_id"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer  "time_factor"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "name"

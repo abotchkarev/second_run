@@ -1,0 +1,8 @@
+// alert('update.js.erb: ajax started');
+$("flash").update('<div class="flash notice">Ajax: <%= escape_javascript(flash.delete(:notice)) %></div>')
+<% if params[:commit] == "Finish"  %>
+$("create_app").update('<%= escape_javascript(render('appointments/create'))  %>')
+$("show_history").update('<%= escape_javascript(render('appointments/history'))  %>') 
+<% end %>
+$("show_active").update('<%= escape_javascript(render( 'appointments/all_active')) %>')
+

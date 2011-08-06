@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  
+   
   before_filter :authenticate
   before_filter :group,             :only => :show
   before_filter :owner,             :only => :destroy

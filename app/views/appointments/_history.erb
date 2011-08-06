@@ -1,0 +1,11 @@
+<% unless @work_history.empty? %>
+  <h3>
+    Work history
+  </h3>    
+  <table id="app_history">
+    <%= render :partial => 'appointments/history_item',
+      :collection => @work_history, :as => :appointment, 
+      :locals => {:title => 'Project' } %>
+  </table>
+  <%= will_paginate @work_history, :param_name => 'history_page' %>
+<% end %>
