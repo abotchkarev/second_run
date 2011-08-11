@@ -1,6 +1,7 @@
 <header>
   <%= link_to logo, root_path %>
-  <nav class="round">
+
+  <nav id="list1" class="round">
     <ul>
       <li><%= link_to "Home", root_path %></li>
       <% if signed_in? %>
@@ -14,9 +15,19 @@
       <li><%= link_to "Help", help_path %></li>
       <% if signed_in? %>
         <li><%= link_to "Sign out", signout_path, :method => :delete %></li>
-      <% else %>
-        <li><%= link_to "Sign in", signin_path %></li>
       <% end %>
+    </ul>
+  </nav>
+
+  <nav id="list2" class="round">  
+    <ul>
+      <li>
+        <% if signed_in? %>
+          <strong><%= current_user.name %></strong>
+        <% else %>
+          <%= link_to "Sign in", signin_path %>
+        <% end %>
+      </li>
     </ul>
   </nav>
 </header>

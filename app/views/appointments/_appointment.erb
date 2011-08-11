@@ -3,38 +3,21 @@
 # Called from viewer pages#home to renders active appointment form(s)
 # 
 %>
-<tr>
-<table>
-  <tr>
-    <td>
-      <strong>
-        Project: <%= link_to appointment.relationship.project.title, 
-          appointment.relationship.project %>
-      </strong>
-      <%= "(Started at #{appointment.created_at.getlocal.to_s[10..18]}" %>
-      <% unless appointment.created_at.to_s[10..18] == appointment.start_time.to_s[10..18] %>
-        <%= appointment.pause ? ". Paused. " : 
-          ". Restarted at #{appointment.start_time.getlocal.to_s[10..18]}" %>
-      <% end %>
-      <%= appointment.pause ? "" : " with time-factor #{appointment.time_factor}." %> )
-    </td>
-    <td>
-      <% form_for appointment, :remote => true do |f| %>
-        <%= f.submit(appointment.pause ? "Resume" : "Pause" ) %>
-      <% end %>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <%= label_tag(:summary, "Summary: ") %>
-      <%= text_field_tag :summary, appointment.summary,  :size => 120,
-        :onchange => remote_function(:url => appointment,  
-        :with => "'commit=Update;appointment[summary]=' + this.value" ) %>
-    </td>
-    <td>
-      <%=  submit_tag "Finish", :onclick => remote_function(:url => appointment, 
-        :with => "'commit=Finish'" )%>
-    </td>
-  </tr>
-</table>
+<tr class='app_<%= "#{appointment.id}"%>'>
+  <td>
+    <strong> 
+      Project: <%= link_to appointment.with_project.title, appointment.with_project %>
+    </strong>
+  </td>
+  <td id='app_<%= "#{appointment.id}"%>_status'>
+    <%= render :partial => 'appointments/status', :locals => {:appointment => appointment} %>
+  </td>
+</tr>
+<tr class='app_<%= "#{appointment.id}"%>'>
+  <td id='app_<%= "#{appointment.id}"%>_summary' colspan="2">
+    <%= render :partial => 'appointments/summary', :locals => {:appointment => appointment} %>
+    <div id='app_<%= "#{appointment.id}"%>_action'>
+      <%= render :partial => 'appointments/action', :locals => {:appointment => appointment} %>
+    </div>
+  </td>
 </tr>

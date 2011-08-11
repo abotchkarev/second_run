@@ -2,19 +2,26 @@
 # Viewer 'pages#home'
 %>
 <%  if signed_in? %>
-  <div id="create_app">
-    <%=  render 'appointments/create'%> 
+  <div id="app_create">
+    <%=  render :partial => 'appointments/create'%> 
   </div>
-  <div id="show_active">
+  <div id="app_active">
     <%=  render :partial => 'appointments/all_active' %>
   </div>
-  <div id="show_history">
-    <%=  render  'appointments/history' %>
+  <div id="app_history">
+    <%=  render  :partial => 'appointments/history' %>
   </div> 
 <% else %>
+
+  <% unless User.first.nil? %>
   <h1>
     <%= @title %>
   </h1>
-  <%=  link_to "Please sign in", signin_path %>
+    <%=  link_to "Please sign in", signin_path %>
+  <% else %>
+  <h1>
+    <%= "New installation of the system" %>
+  </h1>
+    <%=  link_to  "Please click to activate!", signin_path %>
+  <% end %>
 <% end %>
-

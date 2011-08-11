@@ -1,11 +1,11 @@
-<%  unless @active_count.zero? %>    
-  <h3 id="active_count"> 
-    Projects in work <%= @active_count %> (paused <%= @paused_count %>)
-  </h3>
-  <%= will_paginate @active_paginated, :param_name => 'active_page' %>
-  <table>
-    <tr>
-      <%=  render @active_paginated %>
-    </tr>
-  </table>
-<% end %>
+<h3> 
+  <div id="active_count"> 
+    <%  unless @active_count.zero? %>  
+      Projects in work <%= @active_count %> (paused <%= @paused_count %>)
+    <% end %>
+  </div>
+</h3>
+<%= will_paginate @active_paginated, :param_name => 'active_page' %>
+<table id="active_apps">
+    <%=  render(@active_paginated) unless @active_count.zero?%>
+</table>

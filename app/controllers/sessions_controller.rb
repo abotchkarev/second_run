@@ -1,5 +1,7 @@
 class SessionsController < ApplicationController
   
+  before_filter :create_root_if_db_empty, :only => :new 
+    
   def new
     @title = "Sign in"
   end
@@ -9,7 +11,7 @@ class SessionsController < ApplicationController
       params[:session][:email],
       params[:session][:password])
     if user.nil?
-      if User.empty?
+      if User.all.empty?
         create_root
       else
         flash.now[:error] = "Invalid email/password combination."
@@ -30,14 +32,16 @@ class SessionsController < ApplicationController
   
   private
   
-  def create_root
-    user = User.new(:name => "root", :email => "root@e.mail",
-      :password => "123456", :password_confirmation => "123456")
-    user.admin = true
-    user.save
-    user.build_subordination(:chief_id => user.id).save
-    sign_in user
-    flash[:alert] = "Initializing the system. Please update 'root' account"
-    redirect_to edit_user_path(user)
+  def create_root_if_db_empty
+    if User.first.nil?
+      user = User.new(:name => "root", :email => "root@e.mail",
+        :password => "123456", :password_confirmation => "123456")
+      user.admin = true
+      user.save
+      user.build_subordination(:chief_id => user.id).save
+      sign_in user
+      flash[:alert] = "Creating root account! Please change email and password!"
+      redirect_to edit_user_path(user)
+    end
   end
 end

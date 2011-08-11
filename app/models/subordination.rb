@@ -17,4 +17,5 @@ class Subordination < ActiveRecord::Base
   
   belongs_to :chief, :class_name => "User"
   belongs_to :subordinate, :class_name => "User", :foreign_key => "user_id"
+  
 end

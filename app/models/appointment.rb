@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110724005550
+# Schema version: 20110810072345
 #
 # Table name: appointments
 #
@@ -8,12 +8,11 @@
 #  summary         :text
 #  active          :boolean         default(TRUE)
 #  created_at      :datetime
-#  updated_at      :datetime   
+#  updated_at      :datetime
 #  relationship_id :integer
 #  pause           :boolean
 #  start_time      :datetime
 #  end_time        :datetime
-#  parent_id       :integer    # ?????
 #
 
 class Appointment < ActiveRecord::Base
@@ -73,5 +72,9 @@ class Appointment < ActiveRecord::Base
   def put_on_pause
     self.save_inactive_child
     self.save_paused
+  end
+  
+  def with_project
+    self.relationship.project
   end
 end

@@ -30,23 +30,5 @@ class Project < ActiveRecord::Base
   has_many :executors, :class_name => "User",
     :through => :relationships, :source => :user
   
-
-  
-
-  
-  
-
-  
-
-
-  #--------------------------------------------------------------
-   
-  #def progress
-  #  appointments
-  #end
-  
-  #def progress_by(user)
-  #  relationships.find_by_user_id(user).appointments
-  #end
 end
 

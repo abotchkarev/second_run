@@ -1,8 +1,23 @@
-// alert('update.js.erb: ajax started');
-$("flash").update('<div class="flash notice">Ajax: <%= escape_javascript(flash.delete(:notice)) %></div>')
-<% if params[:commit] == "Finish"  %>
-$("create_app").update('<%= escape_javascript(render('appointments/create'))  %>')
-$("show_history").update('<%= escape_javascript(render('appointments/history'))  %>') 
-<% end %>
-$("show_active").update('<%= escape_javascript(render( 'appointments/all_active')) %>')
+<%= render :partial => 'appointments/flash_each' %>
 
+<% unless ["Update"].include?(@commit) %>
+  <% if @active_count.zero? %>
+    $("#active_count").empty(); 
+  <% else %> 
+    $("#active_count").html('Projects in work <%= @active_count %> (paused <%= @paused_count %>)');
+  <% end %>
+  <% @active_paginated.each do |appointment| %>    
+    $('#app_<%= "#{appointment.id}"%>_status').html('<%= escape_javascript(
+      render(:partial => 'appointments/status', :locals => {:appointment => appointment} )) %>');
+  <% end %>   
+<% end %>
+
+<% if ["Pause","Resume"].include?(@commit) %>
+  $('#pause_<%= "#{params[:id]}"%>').attr('value','<%=(@appointment.pause ? "Resume" : "Pause" )%>');
+<% end %>
+
+<% if ["Finish"].include?(@commit) %> 
+  $('.app_<%="#{params[:id]}"%>').remove();
+  $("#app_create").html('<%= escape_javascript(render('appointments/create'))  %>');
+  $("#app_history").html('<%= escape_javascript(render('appointments/history'))  %>'); 
+<% end %>

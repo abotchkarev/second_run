@@ -1,4 +1,23 @@
-// alert('create.js.erb: ajax started')
- $("flash").update('<div class="flash notice">Ajax: <%= escape_javascript(flash.delete(:notice)) %></div>')
- $("create_app").update('<%= escape_javascript(render('appointments/create'))  %>')
- $("show_active").update('<%= escape_javascript(render( 'appointments/all_active')) %>')
+<%= render :partial => 'appointments/flash_each' %>
+
+$("#app_create").html('<%= escape_javascript(render('appointments/create'))  %>');
+$("#active_count").html('Projects in work <%= @active_count %> (paused <%= @paused_count %>)');
+$("#active_apps").prepend('<%= escape_javascript(render @app_to_create) %>');
+
+<% @active_paginated.each do |appointment| %>    
+  $('#app_<%= "#{appointment.id}"%>_status').html('<%= escape_javascript(
+    render(:partial => 'appointments/status', :locals => {:appointment => appointment} )) %>');
+<% end %> 
+
+$('#summary_<%="#{@app_to_create.id}"%>').bind(
+  { 
+    mouseover:  function(){ $(this).mouseoverWithAjax(); },
+    mouseout:   function(){ $(this).mouseoutWithAjax();  },
+    change:     function(){ $(this).changeWithAjax();    }
+  }
+);
+
+$.map(['mouseover', 'mouseout', 'change'], function(event) { 
+    $('#summary_<%="#{@app_to_create.id}"%>').trigger(event);
+});
+

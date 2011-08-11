@@ -1,0 +1,11 @@
+<strong>
+  Status: 
+</strong>
+<%= "Started at #{appointment.created_at.getlocal.to_s[10..18]}" %>
+<% unless appointment.created_at.to_s[10..18] == appointment.start_time.to_s[10..18] %>
+  <%= appointment.pause ? ". Paused. " : 
+    ". Restarted at #{appointment.start_time.getlocal.to_s[10..18]}" %>
+<% end %>
+<%= appointment.pause ? "" : " with time-factor #{appointment.time_factor}." %> 
+
+

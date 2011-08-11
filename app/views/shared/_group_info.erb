@@ -5,14 +5,16 @@
 <% group = user.subordinates.delete_if{|f| f == user} %>
 
 <%  if group.size == 0 %>
-  <strong> 
-    Members of this group: 
-  </strong>
-  <ul>      
-    <% user.chief.subordinates.delete_if{|f| f == user.chief}.each do |f|%>
-      <li><%= link_to f.name, f %> </li>
-    <% end %>
-  </ul>
+  <% unless current_user.admin? %>
+    <strong> 
+      Members of this group: 
+    </strong>
+    <ul> 
+      <% user.chief.subordinates.delete_if{|f| f == user.chief}.each do |f|%>
+        <li><%= link_to f.name, f %> </li>
+      <% end %>
+    </ul>
+  <% end %>
 <% else %>
   <strong>
     <%= "Supervises group of" %> <%=  link_to group.size, group_user_path(user) %>

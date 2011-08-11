@@ -12,6 +12,6 @@
 
 class Timeslot < ActiveRecord::Base
   
-  belongs_to :appointment
+  belongs_to :appointment, :dependent => :destroy
   
 end

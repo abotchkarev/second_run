@@ -3,20 +3,32 @@
     <td class="main">      
       <h1>
         <%= gravatar_for @user %> <%= @user.name %>
-        <%= " (for #{current_user.name})" unless current_user?(@user)  %>
-      </h1> <br/>
-       <h3>Projects in work</h3>
-      <table>
-        <% unless @projects.empty? %>
-          <%= render @projects %>
-        <% end %>  
-        <tr> 
-          <td></td>
-          <td><%= render :partial => "projects/create" %></td>
-          <td></td><td></td><td></td>
-        </tr>
-        <%= will_paginate @projects %>
-      </table>
+        <%= " (for #{current_user.name})" unless current_user?(@user)  %><br/><br/>
+      </h1> 
+      <% if current_user.admin? %>
+        <p>
+          <strong>Note:  Root can only create and modify users.  To create (and work on) projects,<br/>  
+            please create new account (if necessary) and sign in as a regular user.</strong>
+        </p>
+        <h3>
+          <%= link_to "Root administration functions", users_path  %>
+        </h3>
+      <% else %>
+        <h3>
+          Projects in work
+        </h3>
+        <table>
+          <% unless @projects.empty? %>
+            <%= render @projects %>
+          <% end %>  
+          <tr> 
+            <td></td>
+            <td><%= render :partial => "projects/create" %></td>
+            <td></td><td></td><td></td>
+          </tr>
+          <%= will_paginate @projects %>
+        </table>
+      <% end %>
     </td>
     <td class="sidebar round">
       <%= render :partial => "shared/sidebar_info" %>
