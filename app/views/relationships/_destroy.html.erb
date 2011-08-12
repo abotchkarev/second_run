@@ -1,7 +1,0 @@
-<%= form_for relationship,
-  :url => "#{relationship_path(relationship)}?return_to=#{request.fullpath}",
-  :html => { :method => :delete } do |f| %>
-  <%= f.hidden_field :user_id %>
-  <%= f.hidden_field :project_id %>
-  <%= f.submit "Release" %>
-<% end %>
