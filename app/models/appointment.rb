@@ -1,20 +1,3 @@
-# == Schema Information
-# Schema version: 20110810072345
-#
-# Table name: appointments
-#
-#  id              :integer         not null, primary key
-#  time_factor     :integer
-#  summary         :text
-#  active          :boolean         default(TRUE)
-#  created_at      :datetime
-#  updated_at      :datetime
-#  relationship_id :integer
-#  pause           :boolean
-#  start_time      :datetime
-#  end_time        :datetime
-#
-
 class Appointment < ActiveRecord::Base
   
   attr_accessible :relationship_id, :summary
@@ -78,3 +61,20 @@ class Appointment < ActiveRecord::Base
     self.relationship.project
   end
 end
+
+# == Schema Information
+#
+# Table name: appointments
+#
+#  id              :integer         not null, primary key
+#  time_factor     :integer
+#  summary         :text
+#  active          :boolean         default(TRUE)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  relationship_id :integer
+#  pause           :boolean         default(FALSE)
+#  start_time      :datetime
+#  end_time        :datetime
+#
+
