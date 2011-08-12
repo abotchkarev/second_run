@@ -13,13 +13,13 @@
 ActiveRecord::Schema.define(:version => 20110810072345) do
 
   create_table "appointments", :force => true do |t|
+    t.integer  "relationship_id"
     t.integer  "time_factor"
     t.text     "summary"
     t.boolean  "active",          :default => true
+    t.boolean  "pause",           :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "relationship_id"
-    t.boolean  "pause",           :default => false
     t.datetime "start_time"
     t.datetime "end_time"
   end
