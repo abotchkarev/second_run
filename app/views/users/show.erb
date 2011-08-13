@@ -6,12 +6,8 @@
         <%= " (for #{current_user.name})" unless current_user?(@user)  %><br/><br/>
       </h1> 
       <% if current_user.admin? %>
-        <p>
-          <strong>Note:  Root can only create and modify users.  To create (and work on) projects,<br/>  
-            please create new account (if necessary) and sign in as a regular user.</strong>
-        </p>
         <h3>
-          <%= link_to "Root administration functions", users_path  %>
+          <%= link_to "Root administrative functions", users_path  %>
         </h3>
       <% else %>
         <h3>
