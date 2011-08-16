@@ -1,5 +1,5 @@
 <%= form_for appointment, :remote => true, :class => "summary"  do |f|%>
-  <strong>Action: </strong>
-  <%= f.submit((appointment.pause ? "Resume" : "Pause" ), :id =>"pause_#{appointment.id}") %> or
-  <%= f.submit "Finish" %>
-<% end %>
+    <strong>Action: </strong>
+    <%= f.submit((appointment.pause ? "Resume" : "Pause" ), :id =>"pause_#{appointment.id}") %> or
+    <%= f.submit "Finish" %>
+  <% end %>

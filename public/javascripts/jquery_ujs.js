@@ -125,7 +125,10 @@
         }
 
         options = {
-          type: method || 'GET', data: data, dataType: dataType, crossDomain: crossDomain,
+          type: method || 'GET', 
+          data: data, 
+          dataType: dataType, 
+          crossDomain: crossDomain,
           // stopping the "ajax:beforeSend" event will cancel the ajax request
           beforeSend: function(xhr, settings) {
             if (settings.dataType === undefined) {
@@ -178,7 +181,7 @@
         var element = $(this), method = element.is('button') ? 'html' : 'val';
         element.data('ujs:enable-with', element[method]());
         element[method](element.data('disable-with'));
-        element.attr('disabled', 'disabled');
+        element.attr('disabled', 'disabled');  
       });
     },
 
@@ -217,7 +220,7 @@
     },
 
     // Helper function which checks for blank inputs in a form that match the specified CSS selector
-    blankInputs: function(form, specifiedSelector, nonBlank) {
+    blankInputs: function(form, specifiedSelector, nonBlank) { 
       var inputs = $(), input,
         selector = specifiedSelector || 'input,textarea';
       form.find(selector).each(function() {
@@ -236,7 +239,7 @@
     },
 
     // Helper function, needed to provide consistent behavior in IE
-    stopEverything: function(e) {
+    stopEverything: function(e) { 
       $(e.target).trigger('ujs:everythingStopped');
       e.stopImmediatePropagation();
       return false;
@@ -244,7 +247,7 @@
 
     // find all the submit events directly bound to the form and
     // manually invoke them. If anyone returns false then stop the loop
-    callFormSubmitBindings: function(form) {
+    callFormSubmitBindings: function(form) { 
       var events = form.data('events'), continuePropagation = true;
       if (events !== undefined && events['submit'] !== undefined) {
         $.each(events['submit'], function(i, obj){
@@ -257,8 +260,9 @@
 
   // ajaxPrefilter is a jQuery 1.5 feature
   if ('ajaxPrefilter' in $) {
+   
     $.ajaxPrefilter(function(options, originalOptions, xhr){ if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
-  } else {
+  } else { 
     $(document).ajaxSend(function(e, xhr, options){ if ( !options.crossDomain ) { rails.CSRFProtection(xhr); }});
   }
 
@@ -276,7 +280,7 @@
   });
 
 	$(rails.selectChangeSelector).live('change.rails', function(e) {
-    var link = $(this);
+    var link = $(this); 
     if (!rails.allowAction(link)) return rails.stopEverything(e);
 
     rails.handleRemote(link);
@@ -284,6 +288,7 @@
   });	
 
   $(rails.formSubmitSelector).live('submit.rails', function(e) {
+     
     var form = $(this),
       remote = form.data('remote') !== undefined,
       blankRequiredInputs = rails.blankInputs(form, rails.requiredInputSelector),
@@ -322,6 +327,7 @@
     var name = button.attr('name'),
       data = name ? {name:name, value:button.val()} : null;
 
+button.closest().hide();
     button.closest('form').data('ujs:submit-button', data);
   });
 

@@ -1,19 +1,14 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 // 
-
 $(document).ready(function(){
     startTime();
+    $("#signout").hide();
+    $("#username").clickUsername();   
     $(".summary").changeWithAjax();
-    $(".summary").mouseoverWithAjax();
-    $(".summary").mouseoutWithAjax();
+    $(".summary").mouseoverEvent();
+    $(".summary").mouseoutEvent();     
 });
-    
-function startTime(){
-    var today=new Date();
-    document.getElementById('timer').innerHTML=today;
-    t=setTimeout('startTime()',500);
-}
 
 jQuery.ajaxSetup({ 
     'beforeSend': function(xhr) {
@@ -21,27 +16,38 @@ jQuery.ajaxSetup({
     }
 })
 
+function startTime(){
+    var today=new Date();
+    document.getElementById('timer').innerHTML=today;
+    t=setTimeout('startTime()',500);
+}
+
+jQuery.fn.clickUsername = function() {
+    this.click( function() { 
+        $("#signout").show(function() {     
+            $(window).one("click", function() {
+                $("#signout").hide();
+            });
+        });
+    });
+}  
+
 jQuery.fn.changeWithAjax = function() {
-    this.change(function() {
-        // alert($(this).parents().attr("action"));
-        // alert($(this).parents().serialize());
+    this.live("change", function() {
         $.post($(this).parents().attr("action"), 
-            $(this).parents().serialize() + ';commit=Update', 
+            $(this).parents().serialize() + '&_method=put&commit=Update', 
             null, "script");   
     }); 
 }
 
-jQuery.fn.mouseoverWithAjax = function() {
-    this.mouseover(function() {
+jQuery.fn.mouseoverEvent = function() {
+    this.live("mouseover", function() {
         $(this).css("background-color","yellow");
     });
 }
 
-jQuery.fn.mouseoutWithAjax = function() {
-    this.mouseout(function() {
+jQuery.fn.mouseoutEvent = function() {
+    this.live("mouseout", function() {
         $(this).css("background-color","white");
     });
 }
-
-
-

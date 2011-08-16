@@ -1,0 +1,6 @@
+$("#flash").empty();
+
+<% flash.each do |key, value| %>
+  $("#flash").append('<div class="flash <%= key %>"><%= value %></div>');
+  <% flash.delete(key) %>
+<% end %>

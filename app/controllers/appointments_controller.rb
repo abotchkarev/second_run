@@ -7,7 +7,7 @@ class AppointmentsController < ApplicationController
   before_filter :correct_create, :only => :create
   before_filter :correct_update, :only => :update
 
-  def create       # Creating new, so time_factor += 1
+  def create       # Creating new (one more), so time_factor += 1
     @time_factor = (@in_progress = current_user.running_apps).size + 1 
     @app_to_create.save_running_with(@time_factor) 
     @in_progress.delete_if {|f| f == @app_to_create}
@@ -20,8 +20,7 @@ class AppointmentsController < ApplicationController
         delete_if{|a| a == @appointment}).size
     msg = "#{params[:id]} success"
     
-    case @commit
-      
+    case @commit    
     when "Update"
       @appointment.save 
       @in_progress = []
@@ -36,7 +35,8 @@ class AppointmentsController < ApplicationController
     else   
       @in_progress = [] 
       msg = "Error! commit = " + @commit.to_s
-    end  
+    end 
+    
     restart_respond_and_flash(msg)
   end
   
@@ -52,9 +52,9 @@ class AppointmentsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to root_path }
       format.js do
-        @new_appointment = Appointment.new # if ["Start", "Finish"].include?(@commit)
-        active_and_activatable # unless ["Update"].include?(@commit)
-        @work_history = current_user.history(params[:history_page]) # if ["Finish", "Delete"].include?(@commit)
+        @new_appointment = Appointment.new
+        active_and_activatable unless ["Update"].include?(@commit)
+        @work_history = current_user.history(params[:history_page]) if ["Finish", "Delete"].include?(@commit)
        
       end
     end
