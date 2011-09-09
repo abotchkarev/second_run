@@ -13,6 +13,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    @page_id = "Projects"
     @title = @user.name     
     @projects = (current_user?(@user) || current_user?(@user.chief) ?
         @user.assignments : @user.assignments & current_user.assignments
