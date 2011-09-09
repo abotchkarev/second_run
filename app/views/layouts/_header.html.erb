@@ -4,6 +4,11 @@
   <nav id="list1" class="round">
     <% top_nav = [{:id => "top-current"},{:class => "top-nav"}] %>
     <ul>
+      <% if @page_id == "Sign in" %>
+      <li>
+        <%= link_to "Sign in", "#", top_nav[(@page_id == "Sign in" ? 0 : 1)] %>
+      </li>
+      <% end %>
       <li> 
         <%= link_to "Home", root_path, top_nav[(@page_id == "Home" ? 0 : 1)] %>
       </li>

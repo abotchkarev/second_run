@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
   before_filter :create_root_if_db_empty, :only => :new 
     
   def new
-    @title = "Sign in"
+    @page_id = @title = "Sign in"
   end
   
   def create
