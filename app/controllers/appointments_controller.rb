@@ -7,7 +7,7 @@ class AppointmentsController < ApplicationController
   before_filter :correct_create, :only => :create
   before_filter :correct_update, :only => :update
 
-  def create       # Creating new (one more), so time_factor += 1
+  def create       # Creating new, so time_factor += 1
     @time_factor = (@in_progress = current_user.running_apps).size + 1 
     @app_to_create.save_running_with(@time_factor) 
     @in_progress.delete_if {|f| f == @app_to_create}

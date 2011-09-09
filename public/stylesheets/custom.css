@@ -59,21 +59,48 @@ a:visited {
 /* Navigation */
 
 
-#list1 {	
-	position: absolute;
-	top: 20px;
-	left: 90px;
-}
-
-#list2 {
-	display: inline;
-	float: right;
-	}
-	
 nav {
     background-color: white;
     padding: 0 0.7em;
     white-space: nowrap;
+}
+
+nav#list1 {	
+	position: absolute;
+	top: 80px;
+	left: 90px;
+	background-color:#cff;
+}
+
+nav#list1 ul li a {
+    padding: 5px 12px;
+    margin: 2px;
+    background-color: #CFCFE1;
+    -moz-border-radius:    8px 8px 0 0;
+    -webkit-border-radius: 8px 8px 0 0;
+    border-radius:         8px 8px 0 0;
+}
+
+nav#list1 ul li a:hover {
+    text-decoration: underline;
+    background-color: #E6E6FA;
+}
+
+nav#list1 ul li a#top-current {
+    text-decoration: none;
+    background-color: white;
+    color: #990000;
+}
+
+nav#list2 {
+	display: inline;
+	float: right;
+}
+
+nav#list3 {	
+	position: absolute;
+	top: 20px;
+	left: 90px;
 }
 
 nav ul {
@@ -99,6 +126,7 @@ nav ul li a:visited {
 nav ul li a:hover {
     text-decoration: underline;
 }
+
 
 /* Sign up button */
 

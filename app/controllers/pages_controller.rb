@@ -3,7 +3,8 @@ class PagesController < ApplicationController
   include AppointmentsHelper
    
   def home
-    if signed_in?
+     @page_id = "Home"
+    if signed_in?    
       @new_appointment = Appointment.new
       active_and_activatable
       @work_history = current_user.history(params[:history_page])
@@ -13,14 +14,15 @@ class PagesController < ApplicationController
   end
   
   def contact
-    @title = "Contact"
+    @page_id = @title = "Contact"
   end
 
   def about
-    @title = "About"
+    @page_id = @title = "About"
+   
   end
 
   def help
-    @title = "Help"
+    @page_id = @title = "Help"
   end
 end

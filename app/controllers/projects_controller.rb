@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
   before_filter :owner,             :only => :destroy
   
   def new
-    @title = "Create new project"
+    @page_id = @title = "Create new project"
     @project = Project.new
     @project.relationships.build
   end
@@ -21,6 +21,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
+    @page_id = "Show project"
     @appointments = @project.appointments.where(:active => false).
       paginate(:per_page => 5, :page => params[:page], 
       :order => 'end_time DESC')

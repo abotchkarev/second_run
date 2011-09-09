@@ -2,18 +2,29 @@
   <%= link_to logo, root_path %>
 
   <nav id="list1" class="round">
+    <% top_nav = [{:id => "top-current"},{:class => "top-nav"}] %>
     <ul>
-      <li><%= link_to "Home", root_path %></li>
+      <li> 
+        <%= link_to "Home", root_path, top_nav[(@page_id == "Home" ? 0 : 1)] %>
+      </li>
       <% if signed_in? %>
         <% unless current_user.admin? %>
-          <li><%= link_to "Projects", current_user %></li>
+          <li>
+            <%= link_to "Projects", current_user, top_nav[(@page_id == "Projects" ? 0 : 1)] %>
+          </li>
         <% end %>
         <% unless current_user.subordinates.empty? %>
-          <li><%= link_to "Group", group_user_path(current_user) %></li>
+          <li>
+            <%= link_to "Group", group_user_path(current_user), top_nav[(@page_id == "Group" ? 0 : 1)] %>
+          </li>
         <% end %>
-        <li><%= link_to "Catalogue", users_path %></li>
+        <li>
+          <%= link_to "Catalogue", users_path, top_nav[(@page_id == "Catalogue" ? 0 : 1)]  %>
+        </li>
       <% end %>
-      <li><%= link_to "Help", help_path %></li>
+      <li>
+        <%= link_to "Help", help_path, top_nav[(@page_id == "Help" ? 0 : 1)] %>
+      </li>
     </ul>
   </nav>
 
@@ -35,5 +46,9 @@
         <% end %>
       </li>
     </ul>
+  </nav>
+  
+  <nav id="list3">
+      <div id="timer">Show timer here</div>
   </nav>
 </header>

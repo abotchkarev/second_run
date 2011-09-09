@@ -18,7 +18,9 @@ jQuery.ajaxSetup({
 
 function startTime(){
     var today=new Date();
-    document.getElementById('timer').innerHTML=today;
+  
+    document.getElementById('timer').innerHTML = 
+        today.toDateString() + "; " + today.toTimeString().substr(0,8);
     t=setTimeout('startTime()',500);
 }
 

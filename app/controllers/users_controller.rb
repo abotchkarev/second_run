@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   
 
   def index
+    @page_id = "Catalogue"
     @title = "Catalogue of Users"
     @users = User.search(params[:search], params[:page])
   end
@@ -21,6 +22,7 @@ class UsersController < ApplicationController
   end
 
   def new
+    @page_id = "New user"
     @user = User.new
     subordination_setup("Sign up")
   end
@@ -37,7 +39,7 @@ class UsersController < ApplicationController
   end
   
   def edit
-    @title = "Edit user"
+    @page_id = @title = "Edit user"
   end
   
   def update
@@ -61,10 +63,12 @@ class UsersController < ApplicationController
   end
    
   def admin
+    @page_id = "Admin"
     subordination_setup("Administring the Account ", @user.chief)
   end
   
   def group
+    @page_id = "Group"
     @title = "Group of #{@user.name}"
     @users = @user.subordinates.delete_if{|f| f == @user}.
       paginate( :per_page => 10, :page => params[:page])

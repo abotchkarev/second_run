@@ -13,6 +13,7 @@
 
 .container {
     width: 1000px;
+    position: relative;
 }
 
 body {
@@ -57,10 +58,18 @@ a:visited {
 
 /* Navigation */
 
-nav {
-    float: right;
+
+#list1 {	
+	position: absolute;
+	top: 20px;
+	left: 90px;
 }
 
+#list2 {
+	display: inline;
+	float: right;
+	}
+	
 nav {
     background-color: white;
     padding: 0 0.7em;
