@@ -4,10 +4,20 @@
   <nav id="list1" class="round">
     <% top_nav = [{:id => "top-current"},{:class => "top-nav"}] %>
     <ul>
+      <% if @page_id == "View User" %>
+        <li>
+          <%= link_to "View User", "#", top_nav[0] %>
+        </li>
+      <% end %>
+      <% if @page_id == "Show project" %>
+        <li>
+          <%= link_to "View Project", "#", top_nav[0] %>
+        </li>
+      <% end %>
       <% if @page_id == "Sign in" %>
-      <li>
-        <%= link_to "Sign in", "#", top_nav[(@page_id == "Sign in" ? 0 : 1)] %>
-      </li>
+        <li>
+          <%= link_to "Sign in", "#", top_nav[0] %>
+        </li>
       <% end %>
       <li> 
         <%= link_to "Home", root_path, top_nav[(@page_id == "Home" ? 0 : 1)] %>
@@ -52,8 +62,8 @@
       </li>
     </ul>
   </nav>
-  
+
   <nav id="list3">
-      <div id="timer">Show timer here</div>
+    <div id="timer">Show timer here</div>
   </nav>
 </header>

@@ -13,8 +13,8 @@ class UsersController < ApplicationController
   end
 
   def show
-    @page_id = "Projects"
-    @title = @user.name     
+    @title = @user.name  
+    @page_id = (current_user?(@user) ? "Projects" : "View User")
     @projects = (current_user?(@user) || current_user?(@user.chief) ?
         @user.assignments : @user.assignments & current_user.assignments
     ).paginate( :per_page => 5, :page => params[:page])    
@@ -82,21 +82,21 @@ class UsersController < ApplicationController
     @default_chief = chief
     user_tree = [@user]
     @chief_candidates = ( @user.admin ? [chief] :
-       User.all - user_tree.each{|u| u.subordinates.each {|f| user_tree << f }})
-    end
-  
-    private
-
-    def get_user
-      @user = User.find_by_id(params[:id])
-    end
-  
-    def current_or_admin
-      redirect_to(root_path) unless current_user?(@user) || current_user.admin?
-    end
-  
-    def admin_only
-      redirect_to(root_path) unless current_user.admin?
-    end
+        User.all - user_tree.each{|u| u.subordinates.each {|f| user_tree << f }})
   end
+  
+  private
+
+  def get_user
+    @user = User.find_by_id(params[:id])
+  end
+  
+  def current_or_admin
+    redirect_to(root_path) unless current_user?(@user) || current_user.admin?
+  end
+  
+  def admin_only
+    redirect_to(root_path) unless current_user.admin?
+  end
+end
 
